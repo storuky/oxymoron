@@ -1,0 +1,6 @@
+<%= render_oxymoron_assets "services/interceptor.js"%>
+<%= render_oxymoron_assets "services/resources.js.erb"%>
+<%= render_oxymoron_assets "services/sign.js"%>
+<%= render_oxymoron_assets "services/validate.js"%>
+
+angular.module("oxymoron.services", ["oxymoron.services.interceptor", "oxymoron.services.resources", "oxymoron.services.sign", "oxymoron.services.validate"])

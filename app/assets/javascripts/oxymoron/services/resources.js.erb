@@ -1,0 +1,12 @@
+angular.module("oxymoron.services.resources", [])
+  .factory('resourceDecorator', [function () {
+    return function(resource) {
+      return resource;
+    };
+  }])
+
+  <% @resources.each do |key, value| %>
+    .factory('<%= key %>', ['$resource', 'resourceDecorator', function ($resource, resourceDecorator) {
+      return resourceDecorator($resource('<%= value[:url] %>.json', <%= value[:default_params].to_json%>, <%= value[:actions].to_json %>));
+    }])
+  <% end %>

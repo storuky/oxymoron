@@ -1,0 +1,62 @@
+(function () {
+  var Routes = function () {
+    var self = this,
+        routes = <%= @routes.to_json %>;
+
+    self.defaultParams = {}
+
+    var serialize = function(obj, prefix) {
+      var str = [];
+      for(var p in obj) {
+        if (obj.hasOwnProperty(p)) {
+          var k = prefix ? prefix + "[" + p + "]" : p, v = obj[p];
+          str.push(typeof v == "object" ?
+            serialize(v, k) :
+            encodeURIComponent(k) + "=" + encodeURIComponent(v));
+        }
+      }
+      return str.join("&");
+    }
+
+    var omit = function (hash, key) {
+      var hash = angular.copy(hash);
+      delete hash[key]
+      return hash
+    }
+
+
+    angular.forEach(routes, function (val, key) {
+      var result = '';
+
+      var gsub = function(params) {
+        if (params.format) {
+          result += '.' + params.format
+        }
+
+        var params = omit(params, 'format');
+        angular.forEach(params, function (v, k) {
+          var subst = ':' + k;
+          if (result.search(subst) != -1) {
+            result = result.replace(subst, v);
+            params = omit(params, k);
+          }
+        })
+        
+        if (Object.keys(params).length)
+          result += '?'+serialize(params)
+
+        return result;
+      }
+
+      self[key+'_path'] = function (params) {
+        var params = angular.extend(angular.copy(val.defaults), params || {});
+        result = val.path;
+        var defaultParams = angular.copy(self.defaultParams);
+        return gsub(angular.extend(defaultParams, params));
+      }
+    })
+  }
+
+  window.Routes = new Routes();
+
+}).call(this)

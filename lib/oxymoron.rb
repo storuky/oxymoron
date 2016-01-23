@@ -4,7 +4,14 @@ end
 
 module Oxymoron
   class Oxymoron
+
     class << self
+      def render_oxymoron_assets asset_name
+        html = File.open("#{Gem.loaded_specs['oxymoron'].full_gem_path}/app/assets/javascripts/oxymoron/#{asset_name}").read
+        template = ERB.new(html, nil, "%")
+        template.result(binding)
+      end
+
       def generate
         Rails.application.reload_routes!
 
