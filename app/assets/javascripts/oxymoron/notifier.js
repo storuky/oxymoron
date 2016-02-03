@@ -1,5 +1,5 @@
 angular.module("oxymoron.notifier", [])
-  .run(['$rootScope', 'ngNotify', 'Validate', '$state', '$http', function ($rootScope, ngNotify, Validate, $state, $http) {
+  .run(['$rootScope', 'ngNotify', 'Validate', '$state', '$http', '$location', function ($rootScope, ngNotify, Validate, $state, $http, $location) {
     ngNotify.config({
         theme: 'pure',
         position: 'top',
@@ -16,8 +16,11 @@ angular.module("oxymoron.notifier", [])
         ngNotify.set(res.data.msg, 'success');
       }
 
-      if (res.data && res.data.redirect_to) {
-        $state.go(res.data.redirect_to, res.data.redirect_options || {})
+      if (res.data && res.data.redirect_to_url) {
+        $location.path(res.data.redirect_to_url);
+      }
+      else if (res.data && res.data.redirect_to) {
+        $state.go(res.data.redirect_to, res.data.redirect_options || {});
       }
     })
 
