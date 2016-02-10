@@ -1,5 +1,5 @@
 angular.module("oxymoron.config.states", [])
-  .config(['$locationProvider', '$stateProvider', function ($locationProvider, $stateProvider) {
+  .config(['$locationProvider', '$stateProvider', '$urlRouterProvider', function ($locationProvider, $stateProvider, $urlRouterProvider) {
     /*
      *  Enable HTML5 History API
     */
@@ -8,6 +8,15 @@ angular.module("oxymoron.config.states", [])
     /*
      *  $stateProvider Rails
     */
+    $urlRouterProvider.rule(function($injector, $location) {
+      var path = $location.path();
+      var hasTrailingSlash = path[path.length-1] === '/';
+
+      if(hasTrailingSlash) {
+        var newPath = path.substr(0, path.length - 1); 
+        return newPath; 
+      }
+    });
 
     var resolve = function (action, $stateParams) {
       return function (actionNames, callback) {
