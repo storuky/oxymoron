@@ -54,6 +54,10 @@
         var defaultParams = angular.copy(self.defaultParams);
         return gsub(angular.extend(defaultParams, params));
       }
+
+      self[key+'_url'] = function (params) {
+        return window.location.origin + self[key+'_path'](params)
+      }
     })
   }
 
