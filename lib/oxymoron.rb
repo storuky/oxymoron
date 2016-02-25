@@ -24,11 +24,19 @@ module Oxymoron
 
         routes.each do |route|
           path = route.path.spec.to_s.gsub('(.:format)', '')
+          url_matcher = "'#{path}'"
+
+          route.path.required_names.each do |required_name|
+            if requirements = route.requirements[required_name.to_sym]
+              url_matcher = path.gsub(':'+required_name, "{#{required_name}:(?:#{requirements})}")
+              url_matcher = "$urlMatcherFactoryProvider.compile(\"#{url_matcher}\")"
+            end
+          end
           @routes[route.name] = {defaults: (route.defaults[:params] || {}), path: path}
 
           if route.constraints[:request_method].match("GET")
             @states[route.name] = {
-              url: path,
+              url: url_matcher,
               templateUrl: path,
               cache: route.defaults[:cache] === false ? false : true
             }
