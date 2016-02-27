@@ -185,7 +185,7 @@ Post.destroy({id: id}) // => DELETE /posts/:id.json
 
 ```
 angular.module('app')
-  .controller('PostsCtrl', ['Post', 'action', '$stateParams', function (Post, action, $stateParams) {
+  .controller('PostsCtrl', ['Post', 'action', function (Post, action) {
     var ctrl = this;
     
     // Данный код вызовется только на странице '/posts'
@@ -194,8 +194,8 @@ angular.module('app')
     });
     
     // Вызовется на страницах соответсующих паттерну '/posts/:id'
-    action('show', function(){
-      ctrl.post = Post.get({id: $stateParams.id});
+    action('show', function (params){
+      ctrl.post = Post.get({id: params.id});
     });
     
     // Вызовется на '/posts/new'
@@ -205,8 +205,8 @@ angular.module('app')
     });
     
     // Вызовется на '/posts/:id/edit'
-    action('edit', function(){
-      ctrl.post = Post.edit({id: $stateParams.id});
+    action('edit', function (params){
+      ctrl.post = Post.edit({id: params.id});
       ctrl.save = Post.update;
     })
     
@@ -316,6 +316,7 @@ end
 Routes.posts_path() //=> '/posts'
 Routes.post_path({id: 1}) //=> '/posts/1'
 Routes.post_path({id: 1, format: "json"}) //=> '/posts/1.json'
+Routes.posts_url() //=> 'http://localhost:3000/posts'
 ```
 Старайтесть избегать использование Routes для составления ajax-запросов на методы ресурсов.
 
