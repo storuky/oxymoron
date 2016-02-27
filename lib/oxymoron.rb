@@ -27,8 +27,11 @@ module Oxymoron
           url_matcher = "'#{path}'"
 
           route.path.required_names.each do |required_name|
-            if requirements = route.requirements[required_name.to_sym]
-              url_matcher = path.gsub(':'+required_name, "{#{required_name}:(?:#{requirements})}")
+            if requirement = route.requirements[required_name.to_sym]
+              if requirement.is_a? Regexp
+                requirement = requirement.to_s[7..-2]
+              end
+              url_matcher = path.gsub(':'+required_name, "{#{required_name}:(?:#{requirement})}")
               url_matcher = "$urlMatcherFactoryProvider.compile(\"#{url_matcher}\")"
             end
           end
