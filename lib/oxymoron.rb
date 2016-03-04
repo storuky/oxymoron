@@ -23,6 +23,7 @@ module Oxymoron
         routes_by_controller = routes.select{|route| ['new', 'edit', 'show', 'index'].exclude?(route.defaults[:action])}.group_by{|route| route.defaults[:controller]}.delete_if {|k,v| k.nil?}
 
         routes.each do |route|
+          route_name = route.name
           path = route.path.spec.to_s.gsub('(.:format)', '')
           url_matcher = "'#{path}'"
 
@@ -35,45 +36,60 @@ module Oxymoron
               url_matcher = "$urlMatcherFactoryProvider.compile(\"#{url_matcher}\")"
             end
           end
-          @routes[route.name] = {defaults: (route.defaults[:params] || {}), path: path}
+          @routes[route_name] = {defaults: (route.defaults[:params] || {}), path: path}
 
           if route.constraints[:request_method].match("GET")
-            @states[route.name] = {
+            @states[route_name] = {
               url: url_matcher,
               templateUrl: path,
               cache: route.defaults[:cache] === false ? false : true
             }
             
             if route.defaults[:controller]
-              @states[route.name][:controller] = "#{route.defaults[:controller].camelize.gsub('::', '')}Ctrl as ctrl"
-              @states[route.name][:action] = route.defaults[:action]
+              @states[route_name][:controller] = "#{route.defaults[:controller].camelize.gsub('::', '')}Ctrl as ctrl"
+              @states[route_name][:action] = route.defaults[:action]
             end
 
             if route.defaults[:action] == 'show'
-              @resources[route.name.camelize] = {
+              @resources[route_name.camelize] = {
                 url: path,
                 default_params: Hash[route.path.required_names.map{|name| [name, '@'+name]}]
               }
 
-              for_hash = [
-                ['new', {method: 'GET', url: "#{path}/new.json" }],
-                ['edit', {method: 'GET', url: "#{path}/edit.json"}],
-                ['update', {method: 'PUT'}],
-                ['create', {method: 'POST'}],
-                ['destroy', {method: 'DELETE'}]
-              ]
+              for_hash = {
+                'new'     => {method: 'GET', url: "#{path}/new.json" },
+                'edit'    => {method: 'GET', url: "#{path}/edit.json"},
+                'update'  => {method: 'PUT'},
+                'create'  => {method: 'POST'},
+                'destroy' => {method: 'DELETE'}
+              }
 
               if route_by_controller = routes_by_controller[route.defaults[:controller]]
-                for_hash += routes_by_controller[route.defaults[:controller]].map do |route|
-                  [route.defaults[:action], {
-                    url: route.path.spec.to_s.gsub('(.:format)', '.json'),
-                    isArray: route.defaults[:is_array],
-                    method: /GET|POST|PUT|PATCH|DELETE/.match(route.constraints[:request_method].to_s).to_s
-                  }]
+                routes_by_controller[route.defaults[:controller]].each do |route|
+                  # if route.defaults[:controller] == "spa/comments"
+                  #   rn = route.defaults[:controller].gsub('/', '_')
+                  #   if route_name != rn
+                  #     # ap "#{route_name.camelize} => #{rn.camelize}"
+                  #     # ap path
+                  #   end
+                  #   ap "#{route.name} => #{route.defaults[:controller]} ON #{route.defaults[:action]}"
+                  # end
+
+                  base_path = path.gsub(/:(\w)+/, '').gsub(/\(.*$/, '').gsub('//', '/')
+                  this_route_path = route.path.spec.to_s.gsub(/:(\w)+/, '').gsub(/\(.*$/, '').gsub('//', '/')
+
+                  if (this_route_path.start_with?(base_path))
+                    for_hash[route.defaults[:action]] ||= {
+                      url: route.path.spec.to_s.gsub('(.:format)', '.json'),
+                      isArray: route.defaults[:is_array],
+                      method: /GET|POST|PUT|PATCH|DELETE/.match(route.constraints[:request_method].to_s).to_s
+                    }
+                  end
+                  
                 end
               end
               
-              @resources[route.name.camelize][:actions] = Hash[for_hash]
+              @resources[route_name.camelize][:actions] = for_hash
             end
           end
         end
