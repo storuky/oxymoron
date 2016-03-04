@@ -66,14 +66,6 @@ module Oxymoron
 
               if route_by_controller = routes_by_controller[route.defaults[:controller]]
                 routes_by_controller[route.defaults[:controller]].each do |route|
-                  # if route.defaults[:controller] == "spa/comments"
-                  #   rn = route.defaults[:controller].gsub('/', '_')
-                  #   if route_name != rn
-                  #     # ap "#{route_name.camelize} => #{rn.camelize}"
-                  #     # ap path
-                  #   end
-                  #   ap "#{route.name} => #{route.defaults[:controller]} ON #{route.defaults[:action]}"
-                  # end
 
                   base_path = path.gsub(/:(\w)+/, '').gsub(/\(.*$/, '').gsub('//', '/')
                   this_route_path = route.path.spec.to_s.gsub(/:(\w)+/, '').gsub(/\(.*$/, '').gsub('//', '/')
