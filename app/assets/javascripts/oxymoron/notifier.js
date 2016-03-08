@@ -22,6 +22,10 @@ angular.module("oxymoron.notifier", [])
       else if (res.data && res.data.redirect_to) {
         $state.go(res.data.redirect_to, res.data.redirect_options || {});
       }
+
+      if (res.data.reload) {
+        window.location.reload();
+      }
     })
 
     $rootScope.$on('loading:error', function (h, res, p) {
