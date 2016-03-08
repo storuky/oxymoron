@@ -39,7 +39,7 @@ angular.module("oxymoron.config.states", [])
           url: <%= value[:url] %>,
           templateUrl: function(params) {
             params['ng-view']='';
-            <% unless value[:cache] %>
+            <% if !value[:cache] or value[:action].to_s == "show" %>
               params['v']=(new Date()).getTime();
             <% end %>
             return Routes['<%= key %>_path'](params);
