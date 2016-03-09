@@ -61,12 +61,16 @@ class OxymoronFormBuilder < ActionView::Helpers::FormBuilder
 
 
   private
-    def ng_model method
+    def ng_model method = nil
       object_name = @object_name.to_s.gsub(/\[([\w]+)\]/, "['\\1']")
       object_name.gsub!(/'(#{@options[:child_index]})'/, "\\1") if @options[:child_index]
       prefix = @options[:prefix] || 'ctrl' rescue "ctrl"
 
-      "#{prefix}.#{object_name}['#{method}']".html_safe
+      if method
+        "#{prefix}.#{object_name}['#{method}']".html_safe
+      else
+        "#{prefix}.#{object_name}".html_safe
+      end
     end
 
     def compute_ng_model method, options
