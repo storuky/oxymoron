@@ -3,7 +3,7 @@ angular.module("oxymoron.directives.contentFor", [])
     "$compile", function($compile) {
       return {
         compile: function(el, attrs, transclude) {
-          var template = el.html();
+          var template = attrs.onlyText ? el.text().replace(/(?:\r\n|\r|\n)/g, ' ') : el.html();
 
           return {
             pre: function(scope, iElement, iAttrs, controller) {
