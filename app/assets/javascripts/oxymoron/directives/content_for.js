@@ -8,7 +8,7 @@ angular.module("oxymoron.directives.contentFor", [])
           return {
             pre: function(scope, iElement, iAttrs, controller) {
               var DOMElements = angular.element(document.querySelectorAll('[ng-yield="'+iAttrs.contentFor+'"]'));
-              DOMElements.html(template)
+              DOMElements.html((DOMElements.attr("prefix") || "") + template + (DOMElements.attr("postfix") || ""))
               $compile(DOMElements)(scope);
 
               
