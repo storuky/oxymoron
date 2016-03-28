@@ -44,6 +44,7 @@ angular.module("oxymoron.states.core", [])
             <% end %>
             return Routes['<%= key %>_path'](params);
           },
+          reloadOnSearch: true,
           controller: '<%= value[:controller]%>',
           resolve: {
             action: ['$stateParams', function ($stateParams) {

@@ -17,7 +17,7 @@ angular.module("oxymoron.notifier", [])
         }
 
         if (res.data.redirect_to_url) {
-          $location.path(res.data.redirect_to_url);
+          $location.url(res.data.redirect_to_url);
         }
         else if (res.data.redirect_to) {
           $state.go(res.data.redirect_to, res.data.redirect_options || {});
