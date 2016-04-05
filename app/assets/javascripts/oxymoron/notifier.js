@@ -9,7 +9,6 @@ angular.module("oxymoron.notifier", [])
 
     $rootScope.$on('loading:finish', function (h, res) {
       var csrf = res.headers()['x-csrf-token'] || res.headers()['X-CSRF-token'];
-      console.log(csrf)
       if (csrf) {
         $http.defaults.headers.common['X-CSRF-Token'] = csrf;
       }
