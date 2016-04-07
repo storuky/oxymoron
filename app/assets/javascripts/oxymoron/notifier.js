@@ -8,8 +8,9 @@ angular.module("oxymoron.notifier", [])
     });
 
     $rootScope.$on('loading:finish', function (h, res) {
-      if (res.headers()['x-csrf-token']) {
-        $http.defaults.headers.common['X-CSRF-Token'] = res.headers()['x-csrf-token'];
+      var csrf = res.headers()['x-csrf-token'] || res.headers()['X-CSRF-token'];
+      if (csrf) {
+        $http.defaults.headers.common['X-CSRF-Token'] = csrf;
       }
       if (res.data) {
         if (res.data.msg) {
@@ -30,6 +31,10 @@ angular.module("oxymoron.notifier", [])
     })
 
     $rootScope.$on('loading:error', function (h, res, p) {
+      var csrf = res.headers()['x-csrf-token'] || res.headers()['X-CSRF-token'];
+      if (csrf) {
+        $http.defaults.headers.common['X-CSRF-Token'] = csrf;
+      }
       if (angular.isObject(res.data)) {
         if (res.data.msg) {
           ngNotify.set(res.data.msg, 'error');
