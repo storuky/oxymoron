@@ -12,6 +12,9 @@ angular.module("oxymoron.states.core", [])
       var path = $location.path();
       var hasTrailingSlash = path[path.length-1] === '/';
 
+      //for later access in tempalteUrl callback
+      $stateProvider.oxymoron_location = $location;
+
       if(hasTrailingSlash) {
         var newPath = path.substr(0, path.length - 1); 
         return newPath; 
@@ -42,6 +45,13 @@ angular.module("oxymoron.states.core", [])
             <% unless value[:cache] %>
               params['v']=(new Date()).getTime();
             <% end %>
+
+
+            if ($stateProvider.oxymoron_location) {
+              var query = _.omit($stateProvider.oxymoron_location.search(), _.keys(params));
+              params = angular.extend(query, params); 
+            }
+
             return Routes['<%= key %>_path'](params);
           },
           reloadOnSearch: true,
