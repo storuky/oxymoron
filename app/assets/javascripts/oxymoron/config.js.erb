@@ -1,4 +1,5 @@
 <%= render_oxymoron_assets "config/http.js"%>
 <%= render_oxymoron_assets "config/states.js.erb"%>
+<%= render_oxymoron_assets "config/debug.js.erb"%>
 
-angular.module("oxymoron.config", ['oxymoron.config.http', 'oxymoron.config.states'])
+angular.module("oxymoron.config", ['oxymoron.config.http', 'oxymoron.config.states', 'oxymoron.config.debug'])

@@ -1,0 +1,4 @@
+angular.module("oxymoron.config.debug", [])
+.config(['$compileProvider', function ($compileProvider) {
+  $compileProvider.debugInfoEnabled(<%= Rails.env.development? %>);
+}]);
