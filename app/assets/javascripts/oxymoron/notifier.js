@@ -8,7 +8,12 @@ angular.module("oxymoron.notifier", [])
     });
 
     $rootScope.$on('loading:finish', function (h, res) {
-      var csrf = res.headers()['x-csrf-token'] || res.headers()['X-CSRF-token'];
+      var meta = document.querySelector('meta[name="csrf-token"]'), csrf;
+      if (meta) {
+        csrf = meta.content
+      } else {
+        csrf = res.headers()['x-csrf-token'] || res.headers()['X-CSRF-token'];
+      }
       if (csrf) {
         $http.defaults.headers.common['X-CSRF-Token'] = csrf;
       }
