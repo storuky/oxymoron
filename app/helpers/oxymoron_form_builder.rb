@@ -60,7 +60,7 @@ class OxymoronFormBuilder < ActionView::Helpers::FormBuilder
 
 
 
-  private
+  protected
     def ng_model method = nil
       object_name = @object_name.to_s.gsub(/\[([\w]+)\]/, "['\\1']")
       object_name.gsub!(/'(#{@options[:child_index]})'/, "\\1") if @options[:child_index]
