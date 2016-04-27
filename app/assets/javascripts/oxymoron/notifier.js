@@ -8,24 +8,32 @@ angular.module("oxymoron.notifier", [])
     });
 
     $rootScope.$on('loading:finish', function (h, res) {
-      var meta = document.querySelector('meta[name="csrf-token"]'), csrf;
-      if (meta) {
-        csrf = meta.content
-      } else {
-        csrf = res.headers()['x-csrf-token'] || res.headers()['X-CSRF-token'];
-      }
+      callback('success', res)
+    })
+
+    $rootScope.$on('loading:error', function (h, res, p) {
+      callback('error', res)
+    })
+
+    function callback (type, res) {
+      var headers = res.headers();
+      var csrf = headers['x-csrf-token'] || headers['X-CSRF-token'] || headers['X-CSRF-Token'] || headers['X-CSRF-TOKEN'];
+
       if (csrf) {
         $http.defaults.headers.common['X-CSRF-Token'] = csrf;
       }
-      if (res.data) {
+      if (res.data && angular.isObject(res.data)) {
         if (res.data.msg) {
-          ngNotify.set(res.data.msg, 'success');
+          ngNotify.set(res.data.msg, type);
+        }
+
+        if (res.data.errors) {
+          Validate(res.data.form_name || res.config.data.form_name, res.data.errors)
         }
 
         if (res.data.redirect_to_url) {
           $location.url(res.data.redirect_to_url);
-        }
-        else if (res.data.redirect_to) {
+        } else if (res.data.redirect_to) {
           $state.go(res.data.redirect_to, res.data.redirect_options || {});
         }
 
@@ -33,27 +41,5 @@ angular.module("oxymoron.notifier", [])
           window.location.reload();
         }
       }
-    })
-
-    $rootScope.$on('loading:error', function (h, res, p) {
-      var csrf = res.headers()['x-csrf-token'] || res.headers()['X-CSRF-token'];
-      if (csrf) {
-        $http.defaults.headers.common['X-CSRF-Token'] = csrf;
-      }
-      if (angular.isObject(res.data)) {
-        if (res.data.msg) {
-          ngNotify.set(res.data.msg, 'error');
-        }
-        if (res.data.errors) {
-          Validate(res.data.form_name || res.config.data.form_name, res.data.errors)
-        }
-        if (res.data && res.data.redirect_to) {
-          $state.go(res.data.redirect_to)
-        }
-      } else {
-        if ([-1, 304].indexOf(res.status) == -1) {
-          ngNotify.set(res.statusText, 'error');
-        }
-      }
-    })
+    }
   }])
