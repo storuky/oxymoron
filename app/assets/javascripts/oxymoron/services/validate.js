@@ -1,7 +1,11 @@
 angular.module("oxymoron.services.validate", [])
   .factory('Validate', [function(){
     return function (form, errors){
-      var $form = angular.element(document.querySelector('[name="'+form+'"]')).scope()[form];
+      try {
+        var $form = angular.element(document.querySelector('[name="'+form+'"]')).scope()[form];
+      } catch(e) {
+        var $form = {};
+      }
 
       angular
         .element(document.querySelectorAll('.rails-errors')).remove();
