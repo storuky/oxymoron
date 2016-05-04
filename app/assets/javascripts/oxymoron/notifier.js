@@ -16,12 +16,6 @@ angular.module("oxymoron.notifier", [])
     })
 
     function callback (type, res) {
-      var headers = res.headers();
-      var csrf = headers['x-csrf-token'] || headers['X-CSRF-token'] || headers['X-CSRF-Token'] || headers['X-CSRF-TOKEN'];
-
-      if (csrf) {
-        $http.defaults.headers.common['X-CSRF-Token'] = csrf;
-      }
       if (res.data && angular.isObject(res.data)) {
         if (res.data.msg) {
           ngNotify.set(res.data.msg, type);

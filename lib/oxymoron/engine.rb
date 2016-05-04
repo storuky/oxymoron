@@ -1,3 +1,5 @@
+require 'oxymoron/concern'
+
 module Oxymoron
   class Engine < ::Rails::Engine
 
@@ -6,6 +8,12 @@ module Oxymoron
         ROUTES_PATH = Rails.root.join('app', 'assets', 'javascripts', 'oxymoron.js').to_s
         routes_watch unless Rails.env.production?
         File.write(ROUTES_PATH, Oxymoron.generate)
+      end
+    end
+
+    initializer 'oxymoron.csrf' do |app|
+      ActiveSupport.on_load(:action_controller) do
+        include ::Oxymoron::Concern
       end
     end
 
