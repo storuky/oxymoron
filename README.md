@@ -298,16 +298,6 @@ a ui-sref="edit_post_path({id: id})" Редактировать пост
 a ui-sref="post_path({id: id})" Просмотр поста
 ```
 
-##CSRF-защита
-В случае возникновения ошибок, связанных с устареванием X-CSRF-Token, рекомендуем использовать внутри application_controller.rb следующее решение:
-```
-after_action :set_csrf_cookie
-
-def set_csrf_cookie
-  response.headers['X-CSRF-Token'] = form_authenticity_token if protect_against_forgery?
-end
-```
-
 ##Дополнительно
 В window вам доступна переменная Routes, в которой хранятся все роуты приложения.
 
