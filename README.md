@@ -101,7 +101,7 @@ class PostsController < ActiveRecord::Base
       format.html
       format.json {
         @posts = Post.all
-        render json: @posts, root: false
+        render json: @posts
       }
     end
   end
@@ -110,7 +110,7 @@ class PostsController < ActiveRecord::Base
     respond_to do |format|
       format.html
       format.json {
-        render json: @post, root: false
+        render json: @post
       }
     end
   end
@@ -126,7 +126,7 @@ class PostsController < ActiveRecord::Base
       format.json {
         @post = Post.new post_params
         if @post.save
-          render json: {post: @post, msg: "Post successfully created", redirect_to: "posts_path"}, root: false
+          render json: {post: @post, msg: "Post successfully created", redirect_to: "posts_path"}
         else
           render json: {errors: @post.errors, msg: @post.errors.full_messages.join(', ')}, status: 422
         end
@@ -138,7 +138,7 @@ class PostsController < ActiveRecord::Base
     respond_to do |format|
       format.json {
         if @post.update(post_params)
-          render json: {post: @post, msg: "Post successfully updated", redirect_to: "posts_path"}, root: false
+          render json: {post: @post, msg: "Post successfully updated", redirect_to: "posts_path"}
         else
           render json: {errors: @post.errors, msg: @post.errors.full_messages.join(', ')}, status: 422
         end
