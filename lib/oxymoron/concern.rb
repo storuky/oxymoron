@@ -12,7 +12,7 @@ module Oxymoron
 
     def verified_request?
       if respond_to?(:valid_authenticity_token?, true)
-        super || valid_authenticity_token?(session, request.headers['X-XSRF-TOKEN'])
+        super || valid_authenticity_token?(session, request.headers['X-XSRF-TOKEN'] || cookies['XSRF-TOKEN'])
       else
         super || form_authenticity_token == request.headers['X-XSRF-TOKEN']
       end
