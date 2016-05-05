@@ -172,7 +172,7 @@ Oxymoron добавляет некоторую функциональность 
 ```
 Post.query() // => GET /posts.json
 Post.get({id: id}) // => GET /posts/:id.json
-Post.new() // => GET /posts/:id/new.json
+Post.new() // => GET /posts/new.json
 Post.edit({id: id}) // => GET /posts/:id/edit.json
 Post.create({post: post}) // => POST /posts.json
 Post.update({id: id, post: post}) // => PUT /posts/:id.json
