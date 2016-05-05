@@ -59,7 +59,6 @@ angular.module("oxymoron.directives.fileupload", [])
 
 
           xhr.open('POST', $scope.fileupload);
-          xhr.setRequestHeader('X-CSRF-Token', $http.defaults.headers.common['X-CSRF-Token']);
           xhr.send(fd);
           element[0].value = '';
         })
