@@ -5,9 +5,9 @@ module Oxymoron
 
     initializer 'oxymoron.dependent_on_routes', after: "sprockets.environment" do
       Rails.application.config.after_initialize do
-        ROUTES_PATH = Rails.root.join('app', 'assets', 'javascripts', 'oxymoron.js').to_s
+        JS_ASSETS_PATH = Rails.root.join('app', 'assets', 'javascripts')
         routes_watch unless Rails.env.production?
-        File.write(ROUTES_PATH, Oxymoron.generate)
+        write_assets
       end
     end
 
@@ -20,12 +20,16 @@ module Oxymoron
     private
       def routes_watch
         oxymoron_reloader = ActiveSupport::FileUpdateChecker.new(Dir["#{Rails.root}/config/routes.rb"]) do
-          File.write(ROUTES_PATH, Oxymoron.generate)
+          write_assets
         end
 
         ActionDispatch::Reloader.to_prepare do
           oxymoron_reloader.execute_if_updated
         end
+      end
+
+      def write_assets
+        File.write(JS_ASSETS_PATH.join("oxymoron.js"), Oxymoron.generate("oxymoron.js.erb"))
       end
   end
 end

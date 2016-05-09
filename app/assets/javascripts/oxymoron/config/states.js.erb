@@ -1,5 +1,5 @@
 angular.module("oxymoron.config.states", [])
-  .config(['$locationProvider', '$stateProvider', '$urlRouterProvider', '$urlMatcherFactoryProvider', function ($locationProvider, $stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider) {
+  .config(['$locationProvider', '$stateProvider', '$urlRouterProvider', function ($locationProvider, $stateProvider, $urlRouterProvider) {
     /*
      *  Enable HTML5 History API
     */
@@ -42,7 +42,7 @@ angular.module("oxymoron.config.states", [])
           url: <%= value[:url] %>,
           templateUrl: function(params) {
             params['ng-view']='';
-            <% if !value[:cache] or value[:action].to_s == "show" %>
+            <% unless value[:cache] %>
               params['v']=(new Date()).getTime();
             <% end %>
 
@@ -54,8 +54,8 @@ angular.module("oxymoron.config.states", [])
 
             return Routes['<%= key %>_path'](params);
           },
-          controller: '<%= value[:controller]%>',
           reloadOnSearch: true,
+          controller: '<%= value[:controller]%>',
           resolve: {
             action: ['$stateParams', function ($stateParams) {
               return resolve('<%= value[:action]%>', $stateParams)

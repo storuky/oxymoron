@@ -1,5 +1,5 @@
 angular.module("oxymoron.directives.fileupload", [])
-  .directive('fileupload', ['$http', '$timeout', function ($http, $timeout) {
+  .directive('fileupload', ['$http', '$timeout', '$cookies', function ($http, $timeout, $cookies) {
     return {
       scope: {
         fileupload: "=",
@@ -59,6 +59,7 @@ angular.module("oxymoron.directives.fileupload", [])
 
 
           xhr.open('POST', $scope.fileupload);
+          xhr.setRequestHeader('X-XSRF-Token', $cookies.get('XSRF-TOKEN'));
           xhr.send(fd);
           element[0].value = '';
         })
