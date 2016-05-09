@@ -5,7 +5,7 @@
 Add it to your Gemfile:
 
 ```
-gem "oxymoron", git: "https://github.com/storuky/oxymoron.git", branch: :master
+gem 'oxymoron'
 ```
 
 ## Basic settings (Asset Pipeline)
