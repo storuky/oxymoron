@@ -4,8 +4,8 @@ Gem::Specification.new do |gem|
   gem.name          = "oxymoron" 
   gem.authors       = ["Kononenko Paul"]
   gem.email         = ["storuky@gmail.com"]
-  gem.description   = "Make your Single Page Application"
-  gem.summary       = ""
+  gem.description   = "Make your Single Page Application with new architecture"
+  gem.summary       = "It's using AngularJS and Rails >= 4.2"
 
   gem.version       = Oxymoron::VERSION
   gem.files         = `git ls-files`.split("\n")
