@@ -10,7 +10,7 @@ gem "oxymoron", git: "https://github.com/storuky/oxymoron.git", branch: :master
 
 ## Basic settings (Asset Pipeline)
 
-Add dependencies to your application.js и application.css
+Add dependencies to your application.js and application.css
 
 **application.js**
 ```
@@ -33,7 +33,7 @@ Add dependencies to your application.js и application.css
 
 ##Usage
 
-Next, you need to inject required modules 'oxymoron' и 'ui.router'
+Next, you need to inject required modules 'oxymoron' and 'ui.router'
 
 **application.js**
 ```
