@@ -17,6 +17,7 @@ gem "oxymoron", git: "https://github.com/storuky/oxymoron.git", branch: :master
 /*
 = require oxymoron/angular
 = require oxymoron/angular-resource
+= require oxymoron/angular-cookies
 = require oxymoron/angular-ui-router
 = require oxymoron/ng-notify
 = require oxymoron
