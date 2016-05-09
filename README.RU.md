@@ -1,16 +1,16 @@
 # Oxymoron
 
-##Setup
+##Установка
 
-Add it to your Gemfile:
+Добавьте гем в Gemfile:
 
 ```
 gem "oxymoron", git: "https://github.com/storuky/oxymoron.git", branch: :master
 ```
 
-## Basic settings (Asset Pipeline)
+## Первичные настройки (Asset Pipeline)
 
-Add dependencies to your application.js и application.css
+Подключите зависимости внутри application.js и application.css
 
 **application.js**
 ```
@@ -31,16 +31,16 @@ Add dependencies to your application.js и application.css
  */
 ```
 
-##Usage
+##Использование
 
-Next, you need to inject required modules 'oxymoron' и 'ui.router'
+Далее необходимо заинжектить 'oxymoron' и 'ui.router' в ваше AngularJS-приложение
 
 **application.js**
 ```
 angular.module('app', ['ui.router', 'oxymoron'])
 ```
 
-Create file routes.js, which will contain the application SPA-routings. Method $stateProvider.rails() transform routes.rb to Angular UI Router states.
+Создайте файл routes.js, который будет содержать роуты приложение. Метод $stateProvider.rails() дублирует роутинг рельсового routes.rb.
 
 **routes.js**
 ```
@@ -50,7 +50,7 @@ angular.module('app')
   }])
 ```
 
-Disable layouts for all ajax query:
+В applicaiton_controller.rb необходимо выключать лейаут, если была запрошена страница посредством ajax-запроса.
 
 **app/controllers/application_controller.rb**
 ```
@@ -66,23 +66,23 @@ class ApplicationController < ActionController::Base
   
   private
   def index
-    # In the production mode write this string into initializers/oxymoron.rb
+    # В продуктовом режиме следует прописать эту строчку в initializers/oxymoron.rb
     ActionView::Base.default_form_builder = OxymoronBuilder
   end
 end
 ```
 
-Edit your layout with ui-view notation:
+Отредактируйте ваш лейаут, изменив
 
 **app/views/layouts/application**
 ```
 = yield
 ```
-to
+на
 ```
 ui-view
 ```
-or for SEO-friendly
+или для СЕО-френдли на
 ```
 ui-view
   div[ng-non-bindable]
@@ -90,7 +90,7 @@ ui-view
 ```
 
 
-All controllers methods must be wrapped with respond_to
+Все методы CRUD должны быть обернуты внутрь respond_to
 
 **Example:**
 ```
@@ -167,9 +167,9 @@ class PostsController < ActiveRecord::Base
 end
 ```
 
-Oxymoron add some functionality for your AngularJS application. You can use *factory* whose name matches the name of your resources routes.rb. Do not forget to inject it, when it's required.
-In our case it is Post resource.
+Oxymoron добавляет некоторую функциональность для вашего AngularJS-приложения. В частности, нам становятся доступны фабрики-ресурсы имя которых соответствует имени вашей модели в Rails-приложении. В нашем случае это фабрика Post.
 
+**Доступны следующие методы для работы с ресурсами:**
 ```
 Post.query() // => GET /posts.json
 Post.get({id: id}) // => GET /posts/:id.json
@@ -180,43 +180,43 @@ Post.update({id: id, post: post}) // => PUT /posts/:id.json
 Post.destroy({id: id}) // => DELETE /posts/:id.json
 ```
 
-Add AngularJS-controller "PostsCtrl"
+Создайте AngularJS-контроллер "PostsCtrl"
 
-**Example:**
+**Пример:**
 
 ```
 angular.module('app')
   .controller('PostsCtrl', ['Post', 'action', function (Post, action) {
     var ctrl = this;
     
-    // Called only on '/posts'
+    // Данный код вызовется только на странице '/posts'
     action('index', function(){
       ctrl.posts = Post.query();
     });
     
-    // Called only for '/posts/:id'
+    // Вызовется на страницах соответсующих паттерну '/posts/:id'
     action('show', function (params){
       ctrl.post = Post.get({id: params.id});
     });
     
-    // Called only on '/posts/new'
+    // Вызовется на '/posts/new'
     action('new', function(){
       ctrl.post = Post.new();
       ctrl.save = Post.create;
     });
     
-    // Called only for '/posts/:id/edit'
+    // Вызовется на '/posts/:id/edit'
     action('edit', function (params){
       ctrl.post = Post.edit({id: params.id});
       ctrl.save = Post.update;
     })
     
-    // Called only for '/posts/:id/edit' or '/posts/new'
+    // Вызовется на двух страницах
     action(['edit', 'new'], function(){
       //
     })
     
-    // Called only for your custom resource method. For example: '/posts/some_method'
+    // Вызовется на '/posts/some_method'
     action('some_method', function(){
       //
     })
@@ -225,7 +225,7 @@ angular.module('app')
   }])
 ```
 
-##Example Views
+##Пример Views
 **posts/index.html.slim**
 
 ```
@@ -291,29 +291,34 @@ h1 Edit post
   
 ```
 
-Use *ui-sref* insted of link_to helper
+Для задания ссылок используйте аттрибут ui-sref, как это описано в документации
 ```
-a ui-sref="posts_path" All posts
-a ui-sref="new_post_path" New post
-a ui-sref="edit_post_path({id: id})" Edit post
-a ui-sref="post_path({id: id})" Show
+a ui-sref="posts_path" Все посты
+a ui-sref="new_post_path" Новый пост
+a ui-sref="edit_post_path({id: id})" Редактировать пост
+a ui-sref="post_path({id: id})" Просмотр поста
 ```
 
-##Routes
-In window you can find *Routes* variable, which contains all routes of your app (such as JsRoutes).
+##Дополнительно
+В window вам доступна переменная Routes, в которой хранятся все роуты приложения.
 
-**Example**
+**Например**
 ```
 Routes.posts_path() //=> '/posts'
 Routes.post_path({id: 1}) //=> '/posts/1'
 Routes.post_path({id: 1, format: "json"}) //=> '/posts/1.json'
 Routes.posts_url() //=> 'http://localhost:3000/posts'
 ```
-If your expect that your controller method return an array, you must mark this routes with *is_array* property. If you do not, it throw an exception from angular.
+Старайтесть избегать использование Routes для составления ajax-запросов на методы ресурсов.
+
+Если ожидается, что ваш метод, определенный на ресурсе возвращает массив, то необходимо сделать соответстующую пометку
+
 ```
 resources :posts do
   get 'my', is_array: true
 end
 ```
 
-Happy coding :)
+Тогда выполнив метод Post.my() внутри вашего AngularJS-контроллера, вы получите данные в виде массива. В противном случае, AngularJS выкинет исключение.
+
+Приятного кодинга:)
