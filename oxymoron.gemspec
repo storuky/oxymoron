@@ -4,8 +4,8 @@ Gem::Specification.new do |gem|
   gem.name          = "oxymoron" 
   gem.authors       = ["Kononenko Paul"]
   gem.email         = ["storuky@gmail.com"]
-  gem.description   = "Lol"
-  gem.summary       = "Lal"
+  gem.description   = "Make your Single Page Application"
+  gem.summary       = ""
 
   gem.version       = Oxymoron::VERSION
   gem.files         = `git ls-files`.split("\n")
