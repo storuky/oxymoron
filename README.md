@@ -1,6 +1,6 @@
 # Oxymoron
 
-[Example application](https://github.com/storuky/oxymoron)
+[Example application](https://github.com/storuky/oxymoron_app)
 
 ##Setup
 
