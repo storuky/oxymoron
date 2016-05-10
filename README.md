@@ -1,5 +1,7 @@
 # Oxymoron
 
+[Example application](https://github.com/storuky/oxymoron)
+
 ##Setup
 
 Add it to your Gemfile:
