@@ -4,7 +4,7 @@
   <%= render_oxymoron_assets "directives.js.erb"%>
   <%= render_oxymoron_assets "notifier.js.erb"%>
 
-  angular.module('oxymoron', ['ngNotify', 'ui.router', 'ngResource', 'oxymoron.directives', 'oxymoron.services', 'oxymoron.config', 'oxymoron.notifier'])
+  angular.module('oxymoron', ['ngNotify', 'ngCookies', 'ui.router', 'ngResource', 'oxymoron.directives', 'oxymoron.services', 'oxymoron.config', 'oxymoron.notifier'])
 
 }).call(this);
 
