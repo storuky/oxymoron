@@ -1,4 +1,5 @@
 if defined?(::Rails)
+  require "oxymoron/config"
   require "oxymoron/engine"
 end
 
