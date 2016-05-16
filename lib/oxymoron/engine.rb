@@ -5,7 +5,7 @@ module Oxymoron
 
     initializer 'oxymoron.dependent_on_routes', after: "sprockets.environment" do
       Rails.application.config.after_initialize do
-        JS_ASSETS_PATH = Rails.root.join('app', 'assets', 'javascripts')
+        Config.oxymoron_js_path ||= Rails.root.join('app', 'assets', 'javascripts')
         routes_watch unless Rails.env.production?
         write_assets
       end
@@ -29,7 +29,7 @@ module Oxymoron
       end
 
       def write_assets
-        File.write(JS_ASSETS_PATH.join("oxymoron.js"), Oxymoron.generate("oxymoron.js.erb"))
+        File.write(File.join(Config.oxymoron_js_path, "oxymoron.js"), Oxymoron.generate("oxymoron.js.erb"))
       end
   end
 end
