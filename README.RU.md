@@ -31,6 +31,24 @@ gem "oxymoron", git: "https://github.com/storuky/oxymoron.git", branch: :master
  */
 ```
 
+## Дополнительные настройки
+
+
+**config/initializers/oxymoron.rb**
+```
+Oxymoron::Config.setup do |c|
+  # изменить путь сохранения генерируемого oxymoron.js
+  c.oxymoron_js_path = Rails.root.join('app', 'assets', 'javascripts', 'public') 
+  
+  # Изменить конструктор форм. По умолчанию используется OxymoronFormBuilder
+  c.form_builder = MyFormBuilder 
+  
+  # Запретить переопределение form_for из ActionView::FormHelper. В этом случае используйте хэлперы oxymoron_form_for и oxymoron_field_for
+  c.rewrite_form_for = false 
+end
+```
+
+
 ##Использование
 
 Далее необходимо заинжектить 'oxymoron' и 'ui.router' в ваше AngularJS-приложение

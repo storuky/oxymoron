@@ -33,6 +33,23 @@ Add dependencies to your application.js and application.css
  */
 ```
 
+## Advanced settings
+
+
+**config/initializers/oxymoron.rb**
+```
+Oxymoron::Config.setup do |c|
+  # change path for generated oxymoron.js
+  c.oxymoron_js_path = Rails.root.join('app', 'assets', 'javascripts', 'public') 
+  
+  # Change form builder. By default used OxymoronFormBuilder
+  c.form_builder = MyFormBuilder 
+  
+  # Disabled rewrite form_for method in ActionView::FormHelper. In this case use helpers oxymoron_form_for and oxymoron_field_for
+  c.rewrite_form_for = false 
+end
+```
+
 ##Usage
 
 Next, you need to inject required modules 'oxymoron' and 'ui.router'

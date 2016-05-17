@@ -1,5 +1,7 @@
 if defined?(::Rails)
+  require "oxymoron/oxymoron_form_builder"
   require "oxymoron/config"
+  require "oxymoron/extensions/form_helper"
   require "oxymoron/engine"
 end
 
