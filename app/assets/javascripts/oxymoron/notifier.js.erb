@@ -7,15 +7,7 @@ angular.module("oxymoron.notifier", [])
         type: 'info'
     });
 
-    $rootScope.$on('loading:finish', function (h, res) {
-      callback('success', res)
-    })
-
-    $rootScope.$on('loading:error', function (h, res, p) {
-      callback('error', res)
-    })
-
-    function callback (type, res) {
+    $rootScope.notify_callback = function(type, res) {
       if (res.data && angular.isObject(res.data)) {
         if (res.data.msg) {
           ngNotify.set(res.data.msg, type);
@@ -36,4 +28,14 @@ angular.module("oxymoron.notifier", [])
         }
       }
     }
+
+    $rootScope.$on('loading:finish', function (h, res) {
+      $rootScope.notify_callback('success', res)
+    })
+
+    $rootScope.$on('loading:error', function (h, res, p) {
+      $rootScope.notify_callback('error', res)
+    })
+
+
   }])
