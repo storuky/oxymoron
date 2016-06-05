@@ -53,6 +53,7 @@ module Oxymoron
         end
 
         html_options = options[:html] ||= {}
+        html_options[:name] ||= object_name
         prefix = html_options["ng-submit-prefix"] || 'ctrl'
         html_options["ng-submit"] ||= "formQuery = #{prefix}.save({form_name: '#{object_name}', id: #{prefix}.#{object_name}.id, #{object_name}: #{prefix}.#{object_name}}); $event.preventDefault();"
 
