@@ -9,8 +9,8 @@ angular.module("oxymoron.notifier", [])
 
     $rootScope.notify_callback = function(type, res) {
       if (res.data && angular.isObject(res.data)) {
-        if (res.data.msg) {
-          ngNotify.set(res.data.msg, type);
+        if (res.data.msg || res.data.error) {
+          ngNotify.set(res.data.msg || res.data.error, type);
         }
 
         if (res.data.errors) {
