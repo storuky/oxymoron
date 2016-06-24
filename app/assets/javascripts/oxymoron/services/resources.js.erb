@@ -7,6 +7,6 @@ angular.module("oxymoron.services.resources", [])
 
   <% @resources.each do |key, value| %>
     .factory('<%= key %>', ['$resource', 'resourceDecorator', function ($resource, resourceDecorator) {
-      return resourceDecorator($resource('<%= value[:url] %>.json', <%= value[:default_params].to_json%>, <%= value[:actions].to_json %>));
+      return resourceDecorator($resource('<%= value[:url] %>.json', <%= value[:default_params].to_json%>, <%= JSON.pretty_generate(value[:actions]).split("\n").map{|l| (' ' * 6) + l}.join("\n").strip %>));
     }])
   <% end %>
