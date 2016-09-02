@@ -12,7 +12,7 @@ module Oxymoron
       Rails.application.reload_routes!
       @routes, @states, @resources = {}, {}, {}
       
-      @app_routes = Rails.application.routes.routes.select{|route| route.name.present? && route.constraints[:request_method]}
+      @app_routes = Rails.application.routes.routes.select{|route| route.name.present? && route.verb}
       @app_routes_by_controller = @app_routes.select{|route| ['new', 'edit', 'show', 'index'].exclude?(route.defaults[:action])}.group_by{|route| route.defaults[:controller]}.delete_if {|k,v| k.nil?}
       
       @app_routes.each do |route|
@@ -32,7 +32,7 @@ module Oxymoron
     end
 
     def set_states route
-      if route.constraints[:request_method].match("GET")
+      if route.verb.match("GET")
         path = route.path.spec.to_s.gsub('(.:format)', '')
         url_matcher = "'#{path}'"
 
@@ -87,7 +87,7 @@ module Oxymoron
               for_hash[route.defaults[:action]] ||= {
                 url: route.path.spec.to_s.gsub('(.:format)', '.json'),
                 isArray: route.defaults[:is_array],
-                method: /GET|POST|PUT|PATCH|DELETE/.match(route.constraints[:request_method].to_s).to_s
+                method: /GET|POST|PUT|PATCH|DELETE/.match(route.verb.to_s).to_s
               }
             end
             

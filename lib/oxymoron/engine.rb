@@ -2,7 +2,6 @@ require 'oxymoron/concern'
 
 module Oxymoron
   class Engine < ::Rails::Engine
-
     initializer 'oxymoron.dependent_on_routes', after: "sprockets.environment" do
       Rails.application.config.after_initialize do
 
