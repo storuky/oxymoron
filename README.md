@@ -80,7 +80,7 @@ class ApplicationController < ActionController::Base
       false
     else
       index
-      'application' # или другой лейаут
+      'application' # or other layout
     end
   }
   
