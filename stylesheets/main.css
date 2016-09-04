@@ -22,6 +22,7 @@ a {
   box-shadow: 0 0 20px #ccc;
   -webkit-box-shadow: 0 0 20px #ccc;
   -moz-box-shadow: 0 0 20px #ccc;
+  transition: .3s;
 }
 
 .sidebar__header {
@@ -76,6 +77,8 @@ small {
   top: 0;
   bottom: 0;
   overflow-y: scroll;
+  transition: .3s;
+  padding-left: 10px;
 }
 
 .layout {
@@ -106,4 +109,34 @@ h2 {
 
 .green {
   color: green;
+}
+
+.sidebar-toggle {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  padding: 5px;
+  left: 180px;
+  background: white;
+  cursor: pointer;
+  transition: .3s;
+}
+.sidebar-toggle:hover img {
+  opacity: .5;
+}
+.sidebar-toggle img {
+  display: block;
+}
+
+.toggled .content {
+  left: 0;
+}
+
+.toggled .sidebar {
+  margin-left: -230px;
+}
+
+.toggled .sidebar-toggle {
+  left: 0;
+  box-shadow: 0px 0px 3px rgba(0,0,0,.2);
 }
