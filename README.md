@@ -3,9 +3,9 @@
 gem 'oxymoron'
 ```
 
-(http://storuky.github.io/oxymoron/)[Read the docs]
+[Read the docs](http://storuky.github.io/oxymoron/)
 
-**Oxymoron** is a new approach to build the architecture of SPA-applications. This gem makes a strong connection between server and client side. It is a fully complete framework based on (https://angularjs.org/)[AngularJS] and (https://github.com/rails/rails)[Ruby on Rails].
+**Oxymoron** is a new approach to build the architecture of SPA-applications. This gem makes a strong connection between server and client side. It is a fully complete framework based on [AngularJS](https://angularjs.org/) and [Ruby on Rails](https://github.com/rails/rails).
 
 You can greatly accelerate the development of your applications with it. But not only that! The speed of your application will accelerate at times.
 
