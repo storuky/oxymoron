@@ -1,0 +1,109 @@
+body {
+  font-size: 14px;
+  line-height: 22px;
+  color: black;
+}
+
+a {
+  text-decoration: underline;
+  cursor: pointer;
+  color: black;
+}
+
+.sidebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 230px;
+  overflow-y: scroll;
+  padding: 10px 0 30px 30px;
+  border-right: 1px solid #bbb;
+  box-shadow: 0 0 20px #ccc;
+  -webkit-box-shadow: 0 0 20px #ccc;
+  -moz-box-shadow: 0 0 20px #ccc;
+}
+
+.sidebar__header {
+  font-size: 18px;
+  font-weight: bold;
+  color: black;
+}
+
+small {
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.sidebar__title {
+  display: block;
+  color: black;
+  font-weight: bold;
+  margin-top: 15px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.sidebar ul ul li:before {
+  content: "–";
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.sidebar ul ul li a {
+  text-decoration: none;
+  color: black;
+  font-size: 12px;
+  line-height: 14px;
+}
+
+.sidebar ul ul li a:hover {
+  text-decoration: underline;
+}
+
+.sidebar__head .sidebar__title {
+  font-size: 18px;
+  text-decoration: none;
+}
+
+.content {
+  position: absolute;
+  left: 230px;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  overflow-y: scroll;
+}
+
+.layout {
+  padding: 30px;
+  width: 660px;
+}
+
+h1 {
+  font-size: 30px;
+  margin: 0.67em 0;
+  color: black;
+}
+
+h2 {
+  margin-top: 40px;
+}
+
+.hot {
+  color: red;
+  margin-left: 5px;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: 5px 10px;
+}
+
+.green {
+  color: green;
+}

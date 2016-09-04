@@ -1,379 +1,777 @@
+
 <!DOCTYPE html>
-<html lang="en-us">
+<html ng-app="app">
   <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Oxymoron by storuky</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <link href="stylesheets/normalize.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet" type="text/css" />
+    <link href="stylesheets/stylesheet.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="stylesheets/main.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/default.min.css" rel="stylesheet" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <base href="/" />
   </head>
   <body>
-    <section class="page-header">
-      <h1 class="project-name">Oxymoron</h1>
-      <h2 class="project-tagline">The newest Rails + AngularJS way</h2>
-      <a href="https://github.com/storuky/oxymoron" class="btn">View on GitHub</a>
-      <a href="https://github.com/storuky/oxymoron/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/storuky/oxymoron/tarball/master" class="btn">Download .tar.gz</a>
-    </section>
-
-    <section class="main-content">
-      <h1>
-<a id="oxymoron" class="anchor" href="#oxymoron" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Oxymoron</h1>
-
-<p><a href="https://github.com/storuky/oxymoron_app">Example application</a></p>
-
-<p><a href="https://github.com/storuky/forum">Basic forum based on Oxymoron</a></p>
-
-<h2>
-<a id="setup" class="anchor" href="#setup" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Setup</h2>
-
-<p>Add it to your Gemfile:</p>
-
-<pre><code>gem 'oxymoron'
-</code></pre>
-
-<h2>
-<a id="basic-settings-asset-pipeline" class="anchor" href="#basic-settings-asset-pipeline" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Basic settings (Asset Pipeline)</h2>
-
-<p>Add dependencies to your application.js and application.css</p>
-
-<p><strong>application.js</strong></p>
-
-<pre><code>/*
+    <div class="sidebar">
+      <ul class="sidebar__head">
+        <li>
+          <a class="sidebar__title" href="">Oxymoron<small>   (1.0.4)</small></a>
+          <ul>
+            <li>
+              <a href="https://github.com/storuky/oxymoron">GitHub</a>
+            </li>
+            <li>
+              <a href="https://rubygems.org/gems/oxymoron">RubyGems</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <ul>
+        <li>
+          <a class="sidebar__title" href="#introduction">Introduction</a>
+        </li>
+        <li>
+          <a class="sidebar__title" href="#setup">Setting up</a>
+          <ul>
+            <li>
+              <a href="#setup_dependency">Dependency injection</a>
+            </li>
+            <li>
+              <a href="#setup_routing">Routing and states</a>
+            </li>
+            <li>
+              <a href="#setup_layouts">Layouts</a>
+            </li>
+            <li>
+              <a href="#setup_formbuilder">FormBuilder</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a class="sidebar__title" href="#rendering">Rendering control</a>
+          <ul>
+            <li>
+              <a href="#rendering_msg">Rendering flash notice</a>
+            </li>
+            <li>
+              <a href="#rendering_errors">Rendering form errors</a>
+            </li>
+            <li>
+              <a href="#rendering_redirect_to">Redirect to state</a>
+            </li>
+            <li>
+              <a href="#rendering_redirect_to_url">Redirect to URL</a>
+            </li>
+            <li>
+              <a href="#rendering_reload">Reload page</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a class="sidebar__title" href="#services">Services</a>
+          <ul>
+            <li>
+              <a href="#services_action">Action</a><span class="hot">Hot!</span>
+            </li>
+            <li>
+              <a href="#services_resources">Resources</a><span class="hot">Hot!</span>
+            </li>
+            <li>
+              <a href="#services_decorator">Resource Decorator</a>
+            </li>
+            <li>
+              <a href="#services_interceptor">Http Interceptor</a>
+            </li>
+            <li>
+              <a href="#services_sign">Sign (in, up, out)</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a class="sidebar__title" href="#directives">Directives</a>
+          <ul>
+            <li>
+              <a href="#directives_yield">ngYield and contentFor</a>
+            </li>
+            <li>
+              <a href="#directives_fileupload">Fileupload</a>
+            </li>
+            <li>
+              <a href="#directives_click_outside">Click Outside</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a class="sidebar__title" href="#routes">Routes</a>
+          <ul>
+            <li>
+              <a href="#routes_js">Routes.js</a>
+            </li>
+            <li>
+              <a href="#routes_array">Render an array</a>
+            </li>
+            <li>
+              <a href="#routes_cache">Page caching</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a class="sidebar__title" href="#lifehacks">Lifehacks</a>
+          <ul>
+            <li>
+              <a href="#lifehacks_devise">Devise integration</a>
+            </li>
+            <li>
+              <a href="#lifehacks_carrierwave">Carrierwave integration</a>
+            </li>
+            <li>
+              <a href="#lifehacks_serializers">ActiveModel Serializers</a>
+            </li>
+            <li>
+              <a href="#lifehacks_admin">Admin and public parts</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a class="sidebar__title" href="#examples">Examples</a>
+        </li>
+        <li>
+          <a class="sidebar__title" href="#conclusion">Conclusion</a>
+        </li>
+      </ul>
+    </div>
+    <div class="content">
+      <div class="layout">
+        <h1 id="introduction">
+          Oxymoron
+        </h1>
+        <p>
+          <a href="https://github.com/storuky/oxymoron">Oxymoron</a> is a new approach to build the architecture of SPA-applications. This gem makes a strong connection between server and client side. It is a fully complete framework based on&nbsp;<a href="https://angularjs.org/">AngularJS</a>&nbsp;and&nbsp;<a gref="https://github.com/rails/rails">Ruby on Rails</a>.
+        </p>
+        <p>
+          You can greatly accelerate the development of your applications with it. But not only that! The speed of your application will accelerate at times.
+        </p>
+        <p>
+          This gem contains the Angular Resources and UI Router States which are&nbsp;<b>automatically generated</b>&nbsp;from the Rails routes (from routes.rb). It also includes all the necessary configs and the most useful services and directives.
+        </p>
+        <h2 id="setup">
+          Setting up
+        </h2>
+        <p>
+          Add it to your Gemfile:
+        </p>
+        <pre><code class="ruby">gem 'oxymoron'</code></pre>
+        <p>
+          Add dependencies to your&nbsp;<i>application.js</i><pre><code class="js">/*
+= require oxymoron/underscore
 = require oxymoron/angular
 = require oxymoron/angular-resource
-= require oxymoron/angular-cookies
 = require oxymoron/angular-ui-router
 = require oxymoron/ng-notify
 = require oxymoron
-*/
-</code></pre>
-
-<p><strong>application.css</strong></p>
-
-<pre><code>/*
- *= require oxymoron/ng-notify
- */
-</code></pre>
-
-<h2>
-<a id="advanced-settings" class="anchor" href="#advanced-settings" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Advanced settings</h2>
-
-<p><strong>config/initializers/oxymoron.rb</strong></p>
-
-<pre><code>Oxymoron::Config.setup do |c|
-  # change path for generated oxymoron.js
-  c.oxymoron_js_path = Rails.root.join('app', 'assets', 'javascripts', 'public') 
-
-  # Change form builder. By default used OxymoronFormBuilder
-  c.form_builder = MyFormBuilder 
-
-  # Disabled rewrite form_for method in ActionView::FormHelper. In this case use helpers oxymoron_form_for and oxymoron_field_for
-  c.rewrite_form_for = false 
-end
-</code></pre>
-
-<h2>
-<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h2>
-
-<p>Next, you need to inject required modules 'oxymoron' and 'ui.router'</p>
-
-<p><strong>application.js</strong></p>
-
-<pre><code>angular.module('app', ['ui.router', 'oxymoron'])
-</code></pre>
-
-<p>Create file routes.js, which will contain the application SPA-routings. Method $stateProvider.rails() transform routes.rb to Angular UI Router states.</p>
-
-<p><strong>routes.js</strong></p>
-
-<pre><code>angular.module('app')
-  .config(['$stateProvider', function ($stateProvider) {
-    $stateProvider.rails()
-  }])
-</code></pre>
-
-<p>Disable layouts for all ajax query:</p>
-
-<p><strong>app/controllers/application_controller.rb</strong></p>
-
-<pre><code>class ApplicationController &lt; ActionController::Base
+*/</code></pre>and&nbsp;<i>application.css</i><pre><code class="css">/*
+*= require oxymoron/ng-notify
+*/</code></pre>
+        </p>
+        <p>
+          As you see, it is using Angular packages,&nbsp;<a href="http://underscorejs.org/">underscore</a>,&nbsp;<a href="https://github.com/angular-ui/ui-router">UI Router</a>&nbsp;and&nbsp;<a href="https://github.com/matowens/ng-notify">ngNotify</a>&nbsp;from&nbsp;<a href="https://github.com/storuky/oxymoron/tree/master/vendor/assets/javascripts/oxymoron">Oxymoron repo</a>. But you can use them from other repository.
+        </p>
+        <h3 id="setup_dependency">
+          Dependency injection
+        </h3>
+        <p>
+          Inject required modules&nbsp;<i>oxymoron</i>&nbsp;and&nbsp;<i>ui.router</i>&nbsp;into you angular application.<pre><code class="js">angular.module('app', ['ui.router', 'oxymoron']);</code></pre>
+        </p>
+        <h3 id="setup_routing">
+          Routing and states
+        </h3>
+        <p>
+          Create file&nbsp;<i>config/routes.js</i>&nbsp;, which will contain the application routing. Method&nbsp;<i>$stateProvider.rails()</i>&nbsp; transform routes.rb to Angular UI Router states.<pre><code class="js">angular.module('app')
+.config(['$stateProvider', function ($stateProvider) {
+  $stateProvider.rails()
+}])</code></pre>Now, if you start your application, rake or just change the routes.rb, new routing will automatically regenerated. You can find it in&nbsp;<i>oxymoron.js</i>.
+        </p>
+        <p>
+          Use&nbsp;<i>ui-sref</i>&nbsp;&nbsp;insted of&nbsp;<i>link_to helper</i>.
+        </p>
+        <p>
+          <b>For example</b>, if you have:<pre><code class="ruby">resources :posts</code></pre>you should use:<pre><code class="haml">a ui-sref="posts_path" All posts
+a ui-sref="new_post_path" New post
+a ui-sref="edit_post_path({id: id})" Edit post
+a ui-sref="post_path({id: id})" Show</code></pre>
+        </p>
+        <h3 id="setup_layouts">
+          Layouts
+        </h3>
+        <p>
+          It's very important to disable layouts for all ajax query. Otherwise it can call recursive views rendering.So, inside your&nbsp;<i>ApplicationController</i>, redefine layout like this:<pre><code class="ruby">class ApplicationController < ActionController::Base
   layout proc {
     if request.xhr?
       false
     else
-      index
-      'application' # or other layout
+      'application' # or other layout from views/layouts/
+    end
+  }
+end</code></pre>
+        </p>
+        <p>
+          Edit your layout with ui-view notation.Change<pre><code class="haml">= yield</code></pre>to<pre><code class="haml">ui-view</code></pre>or for SEO-friendly<pre><code>ui-view
+  div[ng-non-bindable]
+    = yield</code></pre>
+        </p>
+        <h3 id="setup_formbuilder">
+          FormBuilder
+        </h3>
+        <p>
+          Default FormBuilder was rewrited with new paradigm. Now,&nbsp;<i>form_for</i>&nbsp; helper is rendering with ng-submit. And text_field, email_field, etc with ng-model. Add FormBuilder definition to&nbsp;<b>initializers/oxymoron.rb</b>
+        </p>
+        <pre><code class="ruby">ActionView::Base.default_form_builder = OxymoronBuilder</code></pre>
+        <p>
+          Also, you can inherit your FormBuilder from&nbsp;<a href="https://github.com/storuky/oxymoron/blob/master/lib/oxymoron/oxymoron_form_builder.rb">OxymoronBuilder</a>&nbsp;and add some custom helpers using ng-model.
+        </p>
+        <h2 id="rendering">
+          Rendering control
+        </h2>
+        <p>
+          All controllers methods, which expecting to have&nbsp;<i>html</i>&nbsp;and&nbsp;<i>json</i>&nbsp;response, must be wrapped with&nbsp;<i>respond_to</i>, like this:
+        </p>
+        <pre><code class="ruby">class TestController < ActiveRecord::Base
+  def index
+    respond_to do |format|
+      format.html
+      format.json {
+        render json: {}
+      }
+    end
+  end
+end</code></pre>
+        <h3 id="rendering_msg">
+          Rendering flash notice
+        </h3>
+        <p>
+          If you want to show a notice, you can use&nbsp;<i>msg field</i>&nbsp;with http-statuses.
+        </p>
+        <p>
+          <b>For example:</b><pre><code class="ruby">render json: {msg: "Successfully authorized"} # green notice
+render json: {msg: "Not autorized"}, status: 401 # red notice</code></pre>
+        </p>
+        <p>
+          <b>Info:&nbsp;</b>If you want to rewrite this behaviour, you should redefine&nbsp;<i>Notice.callback(type, result)</i>&nbsp; as you want, where type is string: "success" or "error".
+        </p>
+        <h3 id="rendering_errors">
+          Rendering form errors
+        </h3>
+        <p>
+          Validation is automatically invoked, when you render&nbsp;<i>errors field</i>. Just render if you have validation errors with create or update and it's automatically add errors on your form.<pre><code class="ruby">def create
+  @post = Post.new post_params
+  if @post.save
+    render json: {msg: "Post was successfully created"}
+  else
+    render json: {errors: @post.errors}, status: 422
+  end
+end</code></pre>
+        </p>
+        <h3 id="rendering_redirect_to">
+          Redirect to state
+        </h3>
+        <p>
+          If after request you want to redirect user to other state(local path), you can user&nbsp;<i>redirect_to</i>&nbsp; option.
+        </p>
+        <pre><code class="ruby">render json: {redirect_to: "root_path"}</code></pre>And you will be redirected to the root_path without page reloading.
+        <p>
+          You can pass an options, like:
+        </p>
+        <pre><code class="ruby">render json: {redirect_to: "user_path", redirect_options: {id: 1}}</code></pre>And you'll be redirected to the "/users/1" url
+        <h3 id="rendering_redirect_to_url">
+          Redirect to URL
+        </h3>
+        <p>
+          Also, you can use&nbsp;<i>redirect_to_url</i>. It's using $location.url method to change your local state without page reloading.
+        </p>
+        <pre><code class="ruby">render json: {redirect_to_url: "/users/1?foo=bar"}
+# OR
+render json: {redirect_to_url: user_path(id: 1, foo: "bar")}</code></pre>
+        <p>
+          But if you want to get query params, you should use&nbsp;<i>$location.search()</i>&nbsp;instead of&nbsp;<i>$state.params</i>.
+        </p>
+        <h3 id="rendering_reload">
+          Reload page
+        </h3>
+        <p>
+          Sometimes, you may need to reload the user's page. Use&nbsp;<i>reload</i>&nbsp; option:
+        </p>
+        <pre><code class="ruby">render json: {reload: true}</code></pre>
+        <h2 id="services">
+          Services
+        </h2>
+        <h3 id="services_action">
+          Action
+        </h3>
+        <p>
+          Action – is the most useful service that resolves directly to the controller based on the current state and resources GET-methods(routes.rb). Be default it is&nbsp;<i>index, show, new, edit</i>. You can separate your code as you want with this service and it will be invoked in the case of compliance action.
+        </p>
+        <b>For example:</b><pre><code class="ruby">resources :posts do
+  get "custom_method"
+end</code></pre><pre><code class="js">angular.module('app')
+  .controller('PostsCtrl', ['action', function (action) {
+    // Called only on '/posts'
+    action('index', function(){});
+
+    // Called only for '/posts/:id'
+    action('show', function (params){});
+
+    // Called only for '/posts/:id/edit' or '/posts/new'
+    action(['edit', 'new'], function(){})
+
+    // Called only for your custom resource method
+    action('custom_method', function(){})
+  }])</code></pre>
+        <h3 id="services_resources">
+          Resources
+        </h3>
+        <p>
+          Whenever when you update routes.rb, resources are automatically udated. You&nbsp;<b>should inject</b>&nbsp; it is as a service. They have base methods and extending from your custom methods in routes.rb
+        </p>
+        <p>
+          Standart methods for post resource:
+        </p>
+        <pre><code class="js">Post.query() // => GET /posts.json
+Post.get({id: id}) // => GET /posts/:id.json
+Post.new() // => GET /posts/new.json
+Post.edit({id: id}) // => GET /posts/:id/edit.json
+Post.create({post: post}) // => POST /posts.json
+Post.update({id: id, post: post}) // => PUT /posts/:id.json
+Post.destroy({id: id}) // => DELETE /posts/:id.json</code></pre>
+        <p>
+          Earlier we defined method&nbsp;<i>custom_method</i>. When you define a custom method in routes.rb, you also can use it.
+        </p>
+        <pre><code class="js">Post.custom_method() // => GET /posts/custom_method</code></pre>
+        <p>
+          <b>Important:&nbsp;</b><span>Resource must be declared with show-method to generate corresponding service.</span>
+        </p>
+        <h3 id="services_decorator">
+          Reource decorator
+        </h3>
+        <p>
+          You can decorate resource with shared methods. Just define your own service with&nbsp;<i>"resourceDecorator"</i>&nbsp; name and it will be applied for all resources.
+        </p>
+        <pre><code class="js">angular.module('app').factory('resourceDecorator', [function () {
+  return function(resource) {
+    // do it what you want with generated resources
+    // you can add some method through __prototype__
+    // or anything else
+    return resource;
+  };
+}])</code></pre>
+        <h3 id="services_interceptor">
+          Http Interceptor
+        </h3>
+        <p>
+          You can catch all response which was sent from resource/$http like that:
+        </p>
+        <pre><code class="js">$rootScope.$on('loading:finish', function (h, res) {
+  // success response
+})
+
+$rootScope.$on('loading:error', function (h, res, p) {
+  // response with errors
+})</code></pre>
+        <p>
+          PS: It's using for&nbsp;<a href="#rendering">Rendering Controls</a>. So you can extend it as you please.
+        </p>
+        <h3 id="services_sign">
+          Sign (in, up, out)
+        </h3>
+        <p>
+          It's very useful and simple service for the ajax authorization with Devise. You can read more about Devise integration&nbsp;<a href="#lifehacks_devise">in this section</a>.
+        </p>
+        <pre><code class="js">Sign.in(user_params, callback) # => POST /users/sign_in
+Sign.up(user_params, callback) # => POST /users
+Sign.out(callback) # => DELETE /users/sign_out</code></pre>
+        <h2 id="directives">
+          Directives
+        </h2>
+        <h3 id="directives_yield">
+          ngYield and contentFor
+        </h3>
+        <p>
+          It's realy like&nbsp;<i>yield</i>&nbsp;and&nbsp;<i>content_for</i>&nbsp; helpers but only for clientside. It can be very useful for dinamic page-title.
+        </p>
+        <pre><code class="haml">title ng-yield="title"
+body
+  div content-for="title" foobar</code></pre>
+        <p>
+          "foobar" will be inserted into the title and not displayed in the&nbsp;<i>.content block</i>
+        </p>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>
+                ngYield Option
+              </th>
+              <th>
+                Description
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                onlyText
+              </td>
+              <td>
+                Can be "true" or "false". Remove all tags and identation
+              </td>
+            </tr>
+            <tr>
+              <td>
+                prefix
+              </td>
+              <td>
+                Add some prefix text, like "Google – "
+              </td>
+            </tr>
+            <tr>
+              <td>
+                postfix
+              </td>
+              <td>
+                Add some postfix text, like " | Google.com"
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <h3 id="directives_fileupload">
+          Fileupload
+        </h3>
+        <p>
+          This directive can help you to upload some files with AJAX-request. You can read more about Carrierwave integration&nbsp;<a href="#lifehacks_carrierwave">in this section</a>.
+        </p>
+        <pre><code class="haml">input type="file" fileupload="'/uploads/image'" ng-model="uploadedFile"</code></pre>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>
+                Fileupload Option
+              </th>
+              <th>
+                Description
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                fileupload
+              </td>
+              <td>
+                String url to file uploader
+              </td>
+            </tr>
+            <tr>
+              <td>
+                ngModel
+              </td>
+              <td>
+                Result from server. Must be an array.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                percentCompleted
+              </td>
+              <td>
+                The percentage of loaded
+              </td>
+            </tr>
+            <tr>
+              <td>
+                multiple
+              </td>
+              <td>
+                Mark it for multiple upload
+              </td>
+            </tr>
+            <tr>
+              <td>
+                hash
+              </td>
+              <td>
+                True or false. Mark it if you return from server structure like that:{images: [], videos: [], audios: [], etc: []}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <h3 id="directives_fileupload">
+          ClickOutside
+        </h3>
+        <p>
+          Very useful directive for catching a click outside the block. But be careful with it. It will be called every time when you clicked out of the block.
+        </p>
+        <pre><code class="haml">div click-outside="isShow=false" ng-show="isShow"</code></pre>
+        <h2 id="routes">
+          Routes
+        </h2>
+        <h3 id="routes_js">
+          Routes.js
+        </h3>
+        <p>
+          In window you can find Routes variable, which contains all routes of your app (such as &nbsp;<a href="https://github.com/railsware/js-routes">JsRoutes</a>).
+        </p>
+        <pre><code class="js">Routes.posts_path() //=> '/posts'
+Routes.post_path({id: 1}) //=> '/posts/1'
+Routes.post_path({id: 1, format: "json"}) //=> '/posts/1.json'
+Routes.posts_url() //=> 'http://localhost:3000/posts'</code></pre>
+        <h3 id="routes_array">
+          Render an array
+        </h3>
+        <p>
+          If your expect that your controller method return an array, you must mark these routes with is_array property. If you do not, it throw an exception from angular.
+        </p>
+        <pre><code class="ruby">resources :posts do
+  get 'return_array', is_array: true
+end</code></pre>
+        <h3 id="routes_cache">
+          Page caching
+        </h3>
+        By default all pages(except show) cached inside AngularJS templateCache. If you want to disable this behaviour, mark these routes with cache property.<pre><code class="ruby">resources :posts do
+  get 'my_method', cache: false
+end</code></pre>
+        <h2 id="lifehacks">
+          Lifehacks
+        </h2>
+        <h3 id="lifehacks_devise">
+          Devise integration
+        </h3>
+        <b>SessionsController:</b><pre><code class="ruby">class Auth::SessionsController < Devise::SessionsController
+  layout proc {
+    if request.xhr?
+      false
+    else
+      "application"
     end
   }
 
-  private
-  def index
-    # In the production mode write this string into initializers/oxymoron.rb
-    ActionView::Base.default_form_builder = OxymoronBuilder
-  end
-end
-</code></pre>
-
-<p>Edit your layout with ui-view notation:</p>
-
-<p><strong>app/views/layouts/application</strong></p>
-
-<pre><code>= yield
-</code></pre>
-
-<p>to</p>
-
-<pre><code>ui-view
-</code></pre>
-
-<p>or for SEO-friendly</p>
-
-<pre><code>ui-view
-  div[ng-non-bindable]
-    = yield
-</code></pre>
-
-<p>All controllers methods must be wrapped with respond_to</p>
-
-<p><strong>Example:</strong></p>
-
-<pre><code>class PostsController &lt; ActiveRecord::Base
-  before_action :set_post, only: [:show, :update, :destroy]
-
-  def index
-    respond_to do |format|
-      format.html
-      format.json {
-        @posts = Post.all
-        render json: @posts
-      }
-    end
-  end
-
-  def show
-    respond_to do |format|
-      format.html
-      format.json {
-        render json: @post
-      }
-    end
-  end
-
-  def new
-  end
-
-  def edit
-  end
+  after_action :set_csrf_headers, only: [:create, :destroy]
 
   def create
-    respond_to do |format|
-      format.json {
-        @post = Post.new post_params
-        if @post.save
-          render json: {post: @post, msg: "Post successfully created", redirect_to: "posts_path"}
-        else
-          render json: {errors: @post.errors, msg: @post.errors.full_messages.join(', ')}, status: 422
-        end
-      }
-    end
-  end
+    self.resource = warden.authenticate(auth_options)
 
-  def update
-    respond_to do |format|
-      format.json {
-        if @post.update(post_params)
-          render json: {post: @post, msg: "Post successfully updated", redirect_to: "posts_path"}
-        else
-          render json: {errors: @post.errors, msg: @post.errors.full_messages.join(', ')}, status: 422
-        end
-      }
+    if self.resource
+      sign_in(resource_name, self.resource)
+      render json: {msg: "Successfully Signed In"}
+    else
+      render json: {msg: I18n.t('devise.failure.not_found_in_database', authentication_keys: 'email')}, status: 401
     end
   end
 
   def destroy
-    respond_to do |format|
-      format.json {
-        @post.destroy
-        render json: {msg: "Post successfully deleted"}
-      }
+    Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name)
+    render json: {msg: "Successfully Signed out"}
+  end
+
+  protected
+  def set_csrf_headers
+    cookies['XSRF-TOKEN'] = form_authenticity_token if protect_against_forgery?  
+  end
+
+end</code><b>RegistrationsController:</b><pre><code class="ruby">class Auth::RegistrationsController < Devise::RegistrationsController
+  layout proc {
+    if request.xhr?
+      false
+    else
+      "application"
+    end
+  }
+
+  def create
+    build_resource(sign_up_params)
+
+    if resource.save
+      if resource.active_for_authentication?
+        sign_up(resource_name, resource)
+
+        render json: {
+          msg: "Welcome! You have signed up successfully.",
+        }
+      else
+        expire_data_after_sign_in!
+        respond_with resource, location: after_inactive_sign_up_path_for(resource)
+      end
+    else
+      render json: {
+        msg: resource.errors.full_messages.first,
+        errors: resource.errors,
+        form_name: "sign_up_form"
+      }, status: 403
     end
   end
 
-  private
-    def set_post
-      @post = Post.find(params[:id])
-    end
+  def destroy
+    Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name)
+    resource.soft_delete!
+    render json: {msg: "Successfully deleted"}
+  end
 
-    def post_params
-      params.require(:post).permit(:title, :description, :author)
-    end
+  protected
+  def after_update_path_for(resource)
+    edit_user_registration_path
+  end
+
+end</code></pre></pre>
+        <h3 id="lifehacks_carrierwave">
+          Carrierwave integration
+        </h3>
+        <p>
+          Integration takes place in several steps.
+        </p>
+        <ol>
+          <li>
+            First we need to create a model Image(for example) with body<pre><code class="ruby">rails g model image body:string</code></pre>
+          </li>
+          <li>
+            Second, create uploader:<pre><code class="ruby">rails g uploader image</code></pre>and mount it on our model<pre><code class="ruby">mount_uploader :body, ImageUploader</code></pre>
+          </li>
+          <li>
+            Third, create UploadsController:<pre><code class="ruby">               
+class UploadsController < ApplicationController
+  def image
+    @image = Image.create(body: params[:attachments].first)
+    render json: [@image]
+  end
+end</code></pre>
+          </li>
+          <li>
+            Fourthly, create route inside routes.rb:<pre><code class="ruby">resources :uploads, only: [:show] do
+  collection do
+    post "image"
+  end
+end</code></pre>
+          </li>
+          <li>
+            and use fileupload directive:<pre><code class="haml">input type="file" fileupload="'/uploads/image'" ng-model="uploadedFile"
+img ng-src="{{uploadedFile.body.url}}"</code></pre>
+          </li>
+        </ol>
+        <h3 id="lifehacks_serializers">
+          ActiveModel Serializers
+        </h3>
+        <p>
+          You can use&nbsp;<a href="https://github.com/rails-api/active_model_serializers">ActiveModel Serializers</a>&nbsp;with&nbsp;<a href="https://github.com/ohler55/oj">Oj</a>&nbsp;if you want maximum performance. Also, you can add to your ApplicationController some useful methods like:<pre><code class="ruby">def serialize res, options = {}
+  serializer = options[:serializer] || "#{res.model_name}Serializer".constantize
+  if res.respond_to?('each')
+    ActiveModel::ArraySerializer.new(res, each_serializer: serializer, scope: self, root: false).as_json
+  else
+    serializer.new(res, scope: self, root: false).as_json
+  end
 end
-</code></pre>
 
-<p>Oxymoron add some functionality for your AngularJS application. You can use <em>factory</em> whose name matches the name of your resources routes.rb. Do not forget to inject it, when it's required.
-In our case it is Post resource.</p>
-
-<pre><code>Post.query() // =&gt; GET /posts.json
-Post.get({id: id}) // =&gt; GET /posts/:id.json
-Post.new() // =&gt; GET /posts/new.json
-Post.edit({id: id}) // =&gt; GET /posts/:id/edit.json
-Post.create({post: post}) // =&gt; POST /posts.json
-Post.update({id: id, post: post}) // =&gt; PUT /posts/:id.json
-Post.destroy({id: id}) // =&gt; DELETE /posts/:id.json
-</code></pre>
-
-<p>Add AngularJS-controller "PostsCtrl"</p>
-
-<p><strong>Example:</strong></p>
-
-<pre><code>angular.module('app')
-  .controller('PostsCtrl', ['Post', 'action', function (Post, action) {
-    var ctrl = this;
-
-    // Called only on '/posts'
-    action('index', function(){
-      ctrl.posts = Post.query();
-    });
-
-    // Called only for '/posts/:id'
-    action('show', function (params){
-      ctrl.post = Post.get({id: params.id});
-    });
-
-    // Called only on '/posts/new'
-    action('new', function(){
-      ctrl.post = Post.new();
-      ctrl.save = Post.create;
-    });
-
-    // Called only for '/posts/:id/edit'
-    action('edit', function (params){
-      ctrl.post = Post.edit({id: params.id});
-      ctrl.save = Post.update;
-    })
-
-    // Called only for '/posts/:id/edit' or '/posts/new'
-    action(['edit', 'new'], function(){
-      //
-    })
-
-    // Called only for your custom resource method. For example: '/posts/some_method'
-    action('some_method', function(){
-      //
-    })
-
-    // etc
-  }])
-</code></pre>
-
-<h2>
-<a id="example-views" class="anchor" href="#example-views" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example Views</h2>
-
-<p><strong>posts/index.html.slim</strong></p>
-
-<pre><code>h1 Posts
-
-input type="text" ng-model="search"
-
-table
-  thead
-    tr
-      th Date
-      th Title
-      th Author
-  tbody
-    tr ng-repeat="post in ctrl.posts | filter:search"
-      td
-        | {{post.created_at | date:"dd.MM.yyyy"}}
-      td
-        | {{post.title}}
-      td
-        | {{post.author}}
-</code></pre>
-
-<p><strong>posts/show.html.slim</strong></p>
-
-<pre><code>dl
-  dl Date
-  dd
-    | {{ctrl.post.created_at | date:"dd.MM.yyyy"}}
-  dl Title
-  dd
-    | {{ctrl.post.title}}
-  dl author
-  dd
-    | {{ctrl.post.author}}
-</code></pre>
-
-<p><strong>posts/new.html.slim</strong></p>
-
-<pre><code>h1 New post
-
-= render 'form'
-</code></pre>
-
-<p><strong>posts/edit.html.slim</strong></p>
-
-<pre><code>h1 Edit post
-
-= render 'form'
-</code></pre>
-
-<p><strong>posts/_form.html.slim</strong></p>
-
-<pre><code>= form_for Post.new do |f|
-  div
-    = f.label :title
-    = f.text_field :title
-  div
-    = f.label :description
-    = f.text_area :description
-
-  = f.submit "Save"
-
-</code></pre>
-
-<p>Use <em>ui-sref</em> insted of link_to helper</p>
-
-<pre><code>a ui-sref="posts_path" All posts
-a ui-sref="new_post_path" New post
-a ui-sref="edit_post_path({id: id})" Edit post
-a ui-sref="post_path({id: id})" Show
-</code></pre>
-
-<h2>
-<a id="routes" class="anchor" href="#routes" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Routes</h2>
-
-<p>In window you can find <em>Routes</em> variable, which contains all routes of your app (such as JsRoutes).</p>
-
-<p><strong>Example</strong></p>
-
-<pre><code>Routes.posts_path() //=&gt; '/posts'
-Routes.post_path({id: 1}) //=&gt; '/posts/1'
-Routes.post_path({id: 1, format: "json"}) //=&gt; '/posts/1.json'
-Routes.posts_url() //=&gt; 'http://localhost:3000/posts'
-</code></pre>
-
-<p>If your expect that your controller method return an array, you must mark this routes with <em>is_array</em> property. If you do not, it throw an exception from angular.</p>
-
-<pre><code>resources :posts do
-  get 'my', is_array: true
-end
-</code></pre>
-
-<p>Happy coding :)</p>
-
-      <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/storuky/oxymoron">Oxymoron</a> is maintained by <a href="https://github.com/storuky">storuky</a>.</span>
-
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
-      </footer>
-
-    </section>
-
-  
+def dump res, options = {}
+  Oj.dump serialize(res, options).as_json
+end</code></pre>and you can use it in very simple notation and not specified serializer name:<pre><code class="ruby">serialize(@posts)
+#or
+dump(@posts)</code></pre>Serializer name will be taken on the basis of the model name.
+        </p>
+        <h3 id="lifehacks_admin">
+          Admin and public part
+        </h3>
+        <p>
+          Often there is a need for the separation of parts of the application in the admin panel and the public part. You can do this very nicely:
+        </p>
+        <ol>
+          <li>
+            Generate PublicController and AdminController<pre><code class="ruby">class Public::ApplicationController < ApplicationController
+  layout proc {
+    if request.xhr?
+      false
+    else
+      "public"
+    end
+  }
+end</code></pre><pre><code class="ruby">class Admin::ApplicationController < ApplicationController
+  layout proc {
+    if request.xhr?
+      false
+    else
+      "admin"
+    end
+  }
+end</code></pre>
+          </li>
+          <li>
+            Create layouts&nbsp;<i>views/layouts/admin.html.slim</i>&nbsp;and&nbsp;<i>views/layouts/public.html.slim</i>&nbsp;like that:<pre><code class="haml"><!DOCTYPE html>
+html ng-app="app"
+  head
+    meta charset="UTF-8"
+    title Public
+    = csrf_meta_tags
+    = stylesheet_link_tag 'public'
+    base href="/"
+  body
+    ui-view
+    = javascript_include_tag 'public'</code></pre><pre><code class="haml"><!DOCTYPE html>
+html ng-app="app"
+  head
+    meta charset="UTF-8"
+    title Admin
+    = csrf_meta_tags
+    = stylesheet_link_tag 'admin'
+    base href="/"
+  body
+    ui-view
+    = javascript_include_tag 'admin'</code></pre>
+          </li>
+          <li>
+            Create assets:
+            <ul>
+              <li>
+                stylesheets/admin/
+              </li>
+              <li>
+                stylesheets/public/
+              </li>
+              <li>
+                stylesheets/public.scss<pre><code class="css">//= require_tree public</code></pre>
+              </li>
+              <li>
+                stylesheets/admin.scss<pre><code class="css">//= require_tree admin</code></pre>
+              </li>
+              <li>
+                javascripts/public.js<pre><code class="css">//= require_tree public</code></pre>
+              </li>
+              <li>
+                javascripts/admin.js<pre><code class="css">//= require_tree admin</code></pre>
+              </li>
+            </ul>
+            and add it to the&nbsp;<i>config/initializers/assets.rb</i><pre><code class="haml">Rails.application.config.assets.precompile += %w( 
+  public.js admin.js public.css admin.css
+)</code></pre>
+          </li>
+        </ol>
+        <h2 id="examples">
+          Examples
+        </h2>
+        <ol>
+          <li>
+            <a href="https://github.com/storuky/oxymoron_app">Oxymoron Demo App</a>
+          </li>
+          <li>
+            <a href="https://github.com/storuky/forum">Basic forum based on Oxymoron</a>&nbsp;(<a class="green" href="http://forum.habrapp.ru">working demo</a>)
+          </li>
+        </ol>
+        <h2 id="conclusion">
+          Conclusion
+        </h2>
+        <p>
+          If you are russian, you can read my articles of the gem on the Habrahabr: &nbsp;<a href="https://habrahabr.ru/post/300954/">https://habrahabr.ru/post/300954/</a>&nbsp; and &nbsp;<a href="https://habrahabr.ru/post/283214/">https://habrahabr.ru/post/283214/</a>.
+        </p>
+        <p>
+          I will be glad your feedback. Thank you for your time and Happy coding :)
+        </p>
+      </div>
+    </div>
   </body>
 </html>
