@@ -1,5 +1,5 @@
 angular.module("oxymoron.notifier", [])
-  .run(['$rootScope', 'ngNotify', 'Validate', '$state', '$http', '$location', function ($rootScope, ngNotify, Validate, $state, $http, $location) {
+  .run(['$rootScope', 'ngNotify', 'Validate', '$state', '$http', '$location', 'Notice', function ($rootScope, ngNotify, Validate, $state, $http, $location, Notice) {
     ngNotify.config({
         theme: 'pure',
         position: 'top',
@@ -7,10 +7,10 @@ angular.module("oxymoron.notifier", [])
         type: 'info'
     });
 
-    $rootScope.notify_callback = function(type, res) {
+    var callback = function(type, res) {
       if (res.data && angular.isObject(res.data)) {
         if (res.data.msg || res.data.error) {
-          ngNotify.set(res.data.msg || res.data.error, type);
+          Notice.callback(type, res);
         }
 
         if (res.data.errors) {
@@ -30,11 +30,11 @@ angular.module("oxymoron.notifier", [])
     }
 
     $rootScope.$on('loading:finish', function (h, res) {
-      $rootScope.notify_callback('success', res)
+      callback('success', res)
     })
 
     $rootScope.$on('loading:error', function (h, res, p) {
-      $rootScope.notify_callback('error', res)
+      callback('error', res)
     })
 
 

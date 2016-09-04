@@ -7,28 +7,22 @@ angular.module("oxymoron.services.sign", [])
         .success(function () {
           if (callback)
             callback()
-          else
-            window.location = "/";
         })
     }
 
-    Sign.in = function (user, callback) {
-      $http.post(Routes.user_session_path(), {user: user})
+    Sign.in = function (user_params, callback) {
+      $http.post(Routes.user_session_path(), {user: user_params})
         .success(function () {
           if (callback)
             callback();
-          else
-            window.location.reload();
         })
     }
 
-    Sign.up = function (user, callback) {
-      $http.post(Routes.user_registration_path(), {user: user})
+    Sign.up = function (user_params, callback) {
+      $http.post(Routes.user_registration_path(), {user: user_params})
         .success(function () {
           if (callback)
             callback();
-          else
-            window.location.reload();
         })
     }
   }])

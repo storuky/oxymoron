@@ -45,11 +45,7 @@ angular.module("oxymoron.config.states", [])
             <% unless value[:cache] %>
               params['v']=(new Date()).getTime();
             <% end %>
-            if ($stateProvider.oxymoron_location) {
-              var query = _.omit($stateProvider.oxymoron_location.search(), _.keys(params));
-              params = angular.extend(query, params); 
-            }
-
+            
             return Routes['<%= key %>_path'](params);
           },
           reloadOnSearch: true,
