@@ -756,7 +756,7 @@ dump(@posts)</code></pre>Serializer name will be taken on the basis of the model
         </p>
         <ol>
           <li>
-            Generate PublicController and AdminController<pre><code class="ruby">class Public::ApplicationController < ApplicationController
+            Generate Public::ApplicationController and Admin::ApplicationController<pre><code class="ruby">class Public::ApplicationController < ApplicationController
   layout proc {
     if request.xhr?
       false
