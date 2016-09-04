@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Oxymoron by storuky</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Oxymoron</h1>
+      <h2 class="project-tagline">The newest Rails + AngularJS way</h2>
+      <a href="https://github.com/storuky/oxymoron" class="btn">View on GitHub</a>
+      <a href="https://github.com/storuky/oxymoron/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/storuky/oxymoron/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="oxymoron" class="anchor" href="#oxymoron" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Oxymoron</h1>
+
+<p><a href="https://github.com/storuky/oxymoron_app">Example application</a></p>
+
+<p><a href="https://github.com/storuky/forum">Basic forum based on Oxymoron</a></p>
+
+<h2>
+<a id="setup" class="anchor" href="#setup" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Setup</h2>
+
+<p>Add it to your Gemfile:</p>
+
+<pre><code>gem 'oxymoron'
+</code></pre>
+
+<h2>
+<a id="basic-settings-asset-pipeline" class="anchor" href="#basic-settings-asset-pipeline" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Basic settings (Asset Pipeline)</h2>
+
+<p>Add dependencies to your application.js and application.css</p>
+
+<p><strong>application.js</strong></p>
+
+<pre><code>/*
+= require oxymoron/angular
+= require oxymoron/angular-resource
+= require oxymoron/angular-cookies
+= require oxymoron/angular-ui-router
+= require oxymoron/ng-notify
+= require oxymoron
+*/
+</code></pre>
+
+<p><strong>application.css</strong></p>
+
+<pre><code>/*
+ *= require oxymoron/ng-notify
+ */
+</code></pre>
+
+<h2>
+<a id="advanced-settings" class="anchor" href="#advanced-settings" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Advanced settings</h2>
+
+<p><strong>config/initializers/oxymoron.rb</strong></p>
+
+<pre><code>Oxymoron::Config.setup do |c|
+  # change path for generated oxymoron.js
+  c.oxymoron_js_path = Rails.root.join('app', 'assets', 'javascripts', 'public') 
+
+  # Change form builder. By default used OxymoronFormBuilder
+  c.form_builder = MyFormBuilder 
+
+  # Disabled rewrite form_for method in ActionView::FormHelper. In this case use helpers oxymoron_form_for and oxymoron_field_for
+  c.rewrite_form_for = false 
+end
+</code></pre>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Next, you need to inject required modules 'oxymoron' and 'ui.router'</p>
+
+<p><strong>application.js</strong></p>
+
+<pre><code>angular.module('app', ['ui.router', 'oxymoron'])
+</code></pre>
+
+<p>Create file routes.js, which will contain the application SPA-routings. Method $stateProvider.rails() transform routes.rb to Angular UI Router states.</p>
+
+<p><strong>routes.js</strong></p>
+
+<pre><code>angular.module('app')
+  .config(['$stateProvider', function ($stateProvider) {
+    $stateProvider.rails()
+  }])
+</code></pre>
+
+<p>Disable layouts for all ajax query:</p>
+
+<p><strong>app/controllers/application_controller.rb</strong></p>
+
+<pre><code>class ApplicationController &lt; ActionController::Base
+  layout proc {
+    if request.xhr?
+      false
+    else
+      index
+      'application' # or other layout
+    end
+  }
+
+  private
+  def index
+    # In the production mode write this string into initializers/oxymoron.rb
+    ActionView::Base.default_form_builder = OxymoronBuilder
+  end
+end
+</code></pre>
+
+<p>Edit your layout with ui-view notation:</p>
+
+<p><strong>app/views/layouts/application</strong></p>
+
+<pre><code>= yield
+</code></pre>
+
+<p>to</p>
+
+<pre><code>ui-view
+</code></pre>
+
+<p>or for SEO-friendly</p>
+
+<pre><code>ui-view
+  div[ng-non-bindable]
+    = yield
+</code></pre>
+
+<p>All controllers methods must be wrapped with respond_to</p>
+
+<p><strong>Example:</strong></p>
+
+<pre><code>class PostsController &lt; ActiveRecord::Base
+  before_action :set_post, only: [:show, :update, :destroy]
+
+  def index
+    respond_to do |format|
+      format.html
+      format.json {
+        @posts = Post.all
+        render json: @posts
+      }
+    end
+  end
+
+  def show
+    respond_to do |format|
+      format.html
+      format.json {
+        render json: @post
+      }
+    end
+  end
+
+  def new
+  end
+
+  def edit
+  end
+
+  def create
+    respond_to do |format|
+      format.json {
+        @post = Post.new post_params
+        if @post.save
+          render json: {post: @post, msg: "Post successfully created", redirect_to: "posts_path"}
+        else
+          render json: {errors: @post.errors, msg: @post.errors.full_messages.join(', ')}, status: 422
+        end
+      }
+    end
+  end
+
+  def update
+    respond_to do |format|
+      format.json {
+        if @post.update(post_params)
+          render json: {post: @post, msg: "Post successfully updated", redirect_to: "posts_path"}
+        else
+          render json: {errors: @post.errors, msg: @post.errors.full_messages.join(', ')}, status: 422
+        end
+      }
+    end
+  end
+
+  def destroy
+    respond_to do |format|
+      format.json {
+        @post.destroy
+        render json: {msg: "Post successfully deleted"}
+      }
+    end
+  end
+
+  private
+    def set_post
+      @post = Post.find(params[:id])
+    end
+
+    def post_params
+      params.require(:post).permit(:title, :description, :author)
+    end
+end
+</code></pre>
+
+<p>Oxymoron add some functionality for your AngularJS application. You can use <em>factory</em> whose name matches the name of your resources routes.rb. Do not forget to inject it, when it's required.
+In our case it is Post resource.</p>
+
+<pre><code>Post.query() // =&gt; GET /posts.json
+Post.get({id: id}) // =&gt; GET /posts/:id.json
+Post.new() // =&gt; GET /posts/new.json
+Post.edit({id: id}) // =&gt; GET /posts/:id/edit.json
+Post.create({post: post}) // =&gt; POST /posts.json
+Post.update({id: id, post: post}) // =&gt; PUT /posts/:id.json
+Post.destroy({id: id}) // =&gt; DELETE /posts/:id.json
+</code></pre>
+
+<p>Add AngularJS-controller "PostsCtrl"</p>
+
+<p><strong>Example:</strong></p>
+
+<pre><code>angular.module('app')
+  .controller('PostsCtrl', ['Post', 'action', function (Post, action) {
+    var ctrl = this;
+
+    // Called only on '/posts'
+    action('index', function(){
+      ctrl.posts = Post.query();
+    });
+
+    // Called only for '/posts/:id'
+    action('show', function (params){
+      ctrl.post = Post.get({id: params.id});
+    });
+
+    // Called only on '/posts/new'
+    action('new', function(){
+      ctrl.post = Post.new();
+      ctrl.save = Post.create;
+    });
+
+    // Called only for '/posts/:id/edit'
+    action('edit', function (params){
+      ctrl.post = Post.edit({id: params.id});
+      ctrl.save = Post.update;
+    })
+
+    // Called only for '/posts/:id/edit' or '/posts/new'
+    action(['edit', 'new'], function(){
+      //
+    })
+
+    // Called only for your custom resource method. For example: '/posts/some_method'
+    action('some_method', function(){
+      //
+    })
+
+    // etc
+  }])
+</code></pre>
+
+<h2>
+<a id="example-views" class="anchor" href="#example-views" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example Views</h2>
+
+<p><strong>posts/index.html.slim</strong></p>
+
+<pre><code>h1 Posts
+
+input type="text" ng-model="search"
+
+table
+  thead
+    tr
+      th Date
+      th Title
+      th Author
+  tbody
+    tr ng-repeat="post in ctrl.posts | filter:search"
+      td
+        | {{post.created_at | date:"dd.MM.yyyy"}}
+      td
+        | {{post.title}}
+      td
+        | {{post.author}}
+</code></pre>
+
+<p><strong>posts/show.html.slim</strong></p>
+
+<pre><code>dl
+  dl Date
+  dd
+    | {{ctrl.post.created_at | date:"dd.MM.yyyy"}}
+  dl Title
+  dd
+    | {{ctrl.post.title}}
+  dl author
+  dd
+    | {{ctrl.post.author}}
+</code></pre>
+
+<p><strong>posts/new.html.slim</strong></p>
+
+<pre><code>h1 New post
+
+= render 'form'
+</code></pre>
+
+<p><strong>posts/edit.html.slim</strong></p>
+
+<pre><code>h1 Edit post
+
+= render 'form'
+</code></pre>
+
+<p><strong>posts/_form.html.slim</strong></p>
+
+<pre><code>= form_for Post.new do |f|
+  div
+    = f.label :title
+    = f.text_field :title
+  div
+    = f.label :description
+    = f.text_area :description
+
+  = f.submit "Save"
+
+</code></pre>
+
+<p>Use <em>ui-sref</em> insted of link_to helper</p>
+
+<pre><code>a ui-sref="posts_path" All posts
+a ui-sref="new_post_path" New post
+a ui-sref="edit_post_path({id: id})" Edit post
+a ui-sref="post_path({id: id})" Show
+</code></pre>
+
+<h2>
+<a id="routes" class="anchor" href="#routes" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Routes</h2>
+
+<p>In window you can find <em>Routes</em> variable, which contains all routes of your app (such as JsRoutes).</p>
+
+<p><strong>Example</strong></p>
+
+<pre><code>Routes.posts_path() //=&gt; '/posts'
+Routes.post_path({id: 1}) //=&gt; '/posts/1'
+Routes.post_path({id: 1, format: "json"}) //=&gt; '/posts/1.json'
+Routes.posts_url() //=&gt; 'http://localhost:3000/posts'
+</code></pre>
+
+<p>If your expect that your controller method return an array, you must mark this routes with <em>is_array</em> property. If you do not, it throw an exception from angular.</p>
+
+<pre><code>resources :posts do
+  get 'my', is_array: true
+end
+</code></pre>
+
+<p>Happy coding :)</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/storuky/oxymoron">Oxymoron</a> is maintained by <a href="https://github.com/storuky">storuky</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
