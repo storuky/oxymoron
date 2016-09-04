@@ -12,8 +12,20 @@
     <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/default.min.css" rel="stylesheet" />
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
+    <script>
+      var toggle = function () {
+        if (document.body.className.match('toggled')) {
+          document.body.className = '';
+        } else {
+          document.body.className = 'toggled';
+        }
+      }
+    </script>
   </head>
   <body>
+    <div class="sidebar-toggle" onclick="toggle()">
+      <img src="images/toggle.png" width="24" />
+    </div>
     <div class="sidebar">
       <ul class="sidebar__head">
         <li>
