@@ -23,6 +23,7 @@ a {
   -webkit-box-shadow: 0 0 20px #ccc;
   -moz-box-shadow: 0 0 20px #ccc;
   transition: .3s;
+  -webkit-overflow-scrolling: touch;
 }
 
 .sidebar__header {
@@ -79,6 +80,7 @@ small {
   overflow-y: scroll;
   transition: .3s;
   padding-left: 10px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .layout {
