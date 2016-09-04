@@ -91,6 +91,17 @@
           </ul>
         </li>
         <li>
+          <a class="sidebar__title" href="#controllers">Controllers</a>
+          <ul>
+            <li>
+              <a href="#controllers_name">Controllers naming</a>
+            </li>
+            <li>
+              <a href="#controllers_save">Using ctrl.save</a>
+            </li>
+          </ul>
+        </li>
+        <li>
           <a class="sidebar__title" href="#directives">Directives</a>
           <ul>
             <li>
@@ -117,6 +128,9 @@
               <a href="#routes_cache">Page caching</a>
             </li>
           </ul>
+        </li>
+        <li>
+          <a class="sidebar__title" href="#advanced">Advanced</a>
         </li>
         <li>
           <a class="sidebar__title" href="#lifehacks">Lifehacks</a>
@@ -177,7 +191,7 @@
 */</code></pre>
         </p>
         <p>
-          As you see, it is using Angular packages,&nbsp;<a href="http://underscorejs.org/">underscore</a>,&nbsp;<a href="https://github.com/angular-ui/ui-router">UI Router</a>&nbsp;and&nbsp;<a href="https://github.com/matowens/ng-notify">ngNotify</a>&nbsp;from&nbsp;<a href="https://github.com/storuky/oxymoron/tree/master/vendor/assets/javascripts/oxymoron">Oxymoron repo</a>. But you can use them from other repository.
+          As you see, it is using Angular packages,&nbsp;<a href="http://underscorejs.org/">underscore</a>, &nbsp; <a href="https://github.com/angular-ui/ui-router">UI Router</a>&nbsp; and &nbsp;<a href="https://github.com/matowens/ng-notify">ngNotify</a>&nbsp; from &nbsp;<a href="https://github.com/storuky/oxymoron/tree/master/vendor/assets/javascripts/oxymoron">Oxymoron repo</a>. But you can use them from other repository.
         </p>
         <h3 id="setup_dependency">
           Dependency injection
@@ -228,7 +242,7 @@ end</code></pre>
         <p>
           Default FormBuilder was rewrited with new paradigm. Now,&nbsp;<i>form_for</i>&nbsp; helper is rendering with ng-submit. And text_field, email_field, etc with ng-model. Add FormBuilder definition to&nbsp;<b>initializers/oxymoron.rb</b>
         </p>
-        <pre><code class="ruby">ActionView::Base.default_form_builder = OxymoronBuilder</code></pre>
+        <pre><code class="ruby">ActionView::Base.default_form_builder = OxymoronFormBuilder</code></pre>
         <p>
           Also, you can inherit your FormBuilder from&nbsp;<a href="https://github.com/storuky/oxymoron/blob/master/lib/oxymoron/oxymoron_form_builder.rb">OxymoronBuilder</a>&nbsp;and add some custom helpers using ng-model.
         </p>
@@ -352,6 +366,14 @@ Post.destroy({id: id}) // => DELETE /posts/:id.json</code></pre>
         <p>
           <b>Important:&nbsp;</b><span>Resource must be declared with show-method to generate corresponding service.</span>
         </p>
+        <p>
+          Name of the Resources consists of a camelized route name.&nbsp;<b>For example:</b>
+        </p>
+        <pre><code class="ruby">resources :posts # => Post
+
+namespace :admin do
+  resources :posts # => AdminPost
+end</code></pre>
         <h3 id="services_decorator">
           Reource decorator
         </h3>
@@ -391,6 +413,34 @@ $rootScope.$on('loading:error', function (h, res, p) {
         <pre><code class="js">Sign.in(user_params, callback) # => POST /users/sign_in
 Sign.up(user_params, callback) # => POST /users
 Sign.out(callback) # => DELETE /users/sign_out</code></pre>
+        <h2 id="controllers">
+          Controllers
+        </h2>
+        <h3 id="controllers_name">
+          Controllers naming
+        </h3>
+        <p>
+          Name of the Angular Controller consists of a Rails Controller name with replacement "Controller" to "Ctrl" and disposal :: if exist.
+        </p>
+        <h3 id="controllers_save">
+          Using ctrl.save
+        </h3>
+        <p>
+          OxymoronFormBuilder adds ng-submit for form_for. All you need is to define a method ctrl.save. In most cases this will be as follows:
+        </p>
+        <pre><code class="js">angular.module('app')
+  .controller('PostsCtrl', ['Post', 'action', function (Post, action) {
+    var ctrl = this;
+
+    action('new', function(){
+      ctrl.save = Post.create;
+    });
+
+    action('edit', function (params){
+      ctrl.save = Post.update;
+    })
+
+  }])</code></pre>
         <h2 id="directives">
           Directives
         </h2>
@@ -539,6 +589,19 @@ end</code></pre>
         </h3>
         By default all pages(except show) cached inside AngularJS templateCache. If you want to disable this behaviour, mark these routes with cache property.<pre><code class="ruby">resources :posts do
   get 'my_method', cache: false
+end</code></pre>
+        <h2 id="advanced">
+          Anvanced
+        </h2>
+        <pre><code class="ruby">Oxymoron::Config.setup do |c|
+  # change path for generated oxymoron.js
+  c.oxymoron_js_path = Rails.root.join('app', 'assets', 'javascripts', 'public') 
+
+  # Change form builder. By default used OxymoronFormBuilder
+  c.form_builder = MyFormBuilder 
+
+  # Disabled rewrite form_for method in ActionView::FormHelper. In this case use helpers oxymoron_form_for and oxymoron_field_for
+  c.rewrite_form_for = false 
 end</code></pre>
         <h2 id="lifehacks">
           Lifehacks
