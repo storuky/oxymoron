@@ -2,6 +2,7 @@ body {
   font-size: 14px;
   line-height: 22px;
   color: black;
+  overflow-y: scroll;
 }
 
 a {
@@ -11,7 +12,7 @@ a {
 }
 
 .sidebar {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   bottom: 0;
@@ -72,15 +73,10 @@ small {
 }
 
 .content {
-  position: absolute;
-  left: 230px;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  overflow-y: scroll;
   transition: .3s;
   padding-left: 10px;
   -webkit-overflow-scrolling: touch;
+  padding-left: 230px;
 }
 
 .layout {
@@ -114,7 +110,7 @@ h2 {
 }
 
 .sidebar-toggle {
-  position: absolute;
+  position: fixed;
   z-index: 1;
   top: 0;
   padding: 5px;
@@ -131,7 +127,7 @@ h2 {
 }
 
 .toggled .content {
-  left: 0;
+  padding-left: 10px;
 }
 
 .toggled .sidebar {
@@ -141,4 +137,8 @@ h2 {
 .toggled .sidebar-toggle {
   left: 0;
   box-shadow: 0px 0px 3px rgba(0,0,0,.2);
+}
+
+.content i {
+  color: green;
 }

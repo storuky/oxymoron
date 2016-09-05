@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html ng-app="app">
   <head>
@@ -28,7 +27,7 @@
     <div class="sidebar">
       <ul class="sidebar__head">
         <li>
-          <a class="sidebar__title" href="https://github.com/storuky/oxymoron">Oxymoron<small>   (1.0.4)</small></a>
+          <a class="sidebar__title" href="https://github.com/storuky/oxymoron">Oxymoron<small>   (1.0.7)</small></a>
           <ul>
             <li>
               <a href="https://github.com/storuky/oxymoron">GitHub</a>
@@ -135,6 +134,9 @@
               <a href="#routes_array">Render an array</a>
             </li>
             <li>
+              <a href="#routes_ui_params">Optional UI Router params</a>
+            </li>
+            <li>
               <a href="#routes_cache">Page caching</a>
             </li>
           </ul>
@@ -201,7 +203,7 @@
 */</code></pre>
         </p>
         <p>
-          As you see, it is using Angular packages,&nbsp;<a href="http://underscorejs.org/">underscore</a>, &nbsp; <a href="https://github.com/angular-ui/ui-router">UI Router</a>&nbsp; and &nbsp;<a href="https://github.com/matowens/ng-notify">ngNotify</a>&nbsp; from &nbsp;<a href="https://github.com/storuky/oxymoron/tree/master/vendor/assets/javascripts/oxymoron">Oxymoron repo</a>. But you can use them from other repository.
+          As you see, it is using Angular packages,&nbsp;<a href="http://underscorejs.org/">underscore</a>,&nbsp; <a href="https://github.com/angular-ui/ui-router">UI Router</a>&nbsp;and &nbsp;<a href="https://github.com/matowens/ng-notify">ngNotify</a>&nbsp;from &nbsp;<a href="https://github.com/storuky/oxymoron/tree/master/vendor/assets/javascripts/oxymoron">Oxymoron repo</a>. But you can use them from other repository.
         </p>
         <h3 id="setup_dependency">
           Dependency injection
@@ -593,11 +595,17 @@ Routes.posts_url() //=> 'http://localhost:3000/posts'</code></pre>
           Render an array
         </h3>
         <p>
-          If your expect that your controller method return an array, you must mark these routes with is_array property. If you do not, it throw an exception from angular.
+          If your expect that your controller method return an array, you must mark these routes with&nbsp;<i>is_array</i>&nbsp;property. If you do not, it throw an exception from angular.
         </p>
         <pre><code class="ruby">resources :posts do
   get 'return_array', is_array: true
 end</code></pre>
+        <h3 id="routes_ui_params">
+          Optional UI Router params
+        </h3>
+        <p>
+          That query parameters are mapped to UI Router's $stateParams object, you need to declare&nbsp;<i>ui_params</i>&nbsp;in you&nbsp;<i>routes.rb</i>:<pre><code class="ruby">get 'method_with_ui_params', ui_params: [:filter, :search, :page]</code></pre>
+        </p>
         <h3 id="routes_cache">
           Page caching
         </h3>
