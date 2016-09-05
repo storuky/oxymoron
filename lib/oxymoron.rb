@@ -34,14 +34,16 @@ module Oxymoron
     def set_states route
       if route.verb.match("GET")
         path = route.path.spec.to_s.gsub('(.:format)', '')
-        url_matcher = "'#{path}'"
+        ui_params = (route.defaults[:ui_params] || []).join("&")
+        ui_params = ui_params.present? ? "?#{ui_params}" : ""
+        url_matcher = "'#{path}#{ui_params}'"
 
         route.path.required_names.each do |required_name|
           if requirement = route.requirements[required_name.to_sym]
             if requirement.is_a? Regexp
               requirement = requirement.to_s[7..-2]
             end
-            url_matcher = path.gsub(':'+required_name, "{#{required_name}:(?:#{requirement})}")
+            url_matcher = path.gsub(':'+required_name, "{#{required_name}:(?:#{requirement})}#{ui_params}")
             url_matcher = "$urlMatcherFactoryProvider.compile(\"#{url_matcher}\")"
           end
         end
