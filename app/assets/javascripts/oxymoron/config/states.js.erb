@@ -74,9 +74,7 @@ angular.module("oxymoron.config.states", [])
             params = angular.extend(defaultParams, params);
           }
 
-          if (angular.isUndefined(options.inherit)) {
-            options.inherit = false;
-          }
+          options.inherit = false;
 
           state.baseGo(to, params, options);
         };
