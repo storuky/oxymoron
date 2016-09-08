@@ -67,9 +67,15 @@ angular.module("oxymoron.config.states", [])
         state.baseGo = state.go;
 
         var go = function(to, params, options) {
+          options = options || {};
+
           if (state.defaultParams) {
             var defaultParams = angular.copy(state.defaultParams);
             params = angular.extend(defaultParams, params);
+          }
+
+          if (angular.isUndefined(options.inherit)) {
+            options.inherit = false;
           }
 
           state.baseGo(to, params, options);
