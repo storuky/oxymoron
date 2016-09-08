@@ -40,6 +40,9 @@ angular.module("oxymoron.config.states", [])
       <% @states.each do |key, value| %>
         .state('<%= key %>_path', {
           url: <%= value[:url] %>,
+          <% if value[:params] %>
+          params: <%= value[:params].to_json %>,
+          <% end %>
           templateUrl: function(params) {
             params['ng-view']='';
             <% unless value[:cache] %>

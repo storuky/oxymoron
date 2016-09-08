@@ -53,6 +53,10 @@ module Oxymoron
           templateUrl: path,
           cache: route.defaults[:cache] === false ? false : true
         }
+
+        if route.defaults[:ui_params]
+          @states[route.name][:params] = Hash[route.defaults[:ui_params].map {|v| [v,nil]}]
+        end
         
         if route.defaults[:controller]
           @states[route.name][:controller] = "#{route.defaults[:controller].camelize.gsub('::', '')}Ctrl as ctrl"
