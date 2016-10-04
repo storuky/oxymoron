@@ -12,15 +12,17 @@ angular.module("oxymoron.directives.fileupload", [])
         $scope.percentCompleted = undefined;
 
         element.bind('change', function(){
+          if ($scope.xhr) $scope.xhr.abort();
+
           var fd = new FormData();
 
           angular.forEach(element[0].files, function (file) {
             fd.append("attachments[]", file);
           })
 
-          var xhr = new XMLHttpRequest;
+          $scope.xhr = new XMLHttpRequest;
 
-          xhr.upload.onprogress = function(e) {
+          $scope.xhr.upload.onprogress = function(e) {
               // Event listener for when the file is uploading
               $scope.$apply(function() {
                   var percentCompleted;
@@ -30,7 +32,7 @@ angular.module("oxymoron.directives.fileupload", [])
               });
           };
 
-          xhr.onload = function() {
+          $scope.xhr.onload = function() {
               var res = JSON.parse(this.responseText)
 
               $scope.$apply(function() {
@@ -58,9 +60,10 @@ angular.module("oxymoron.directives.fileupload", [])
           };
 
 
-          xhr.open('POST', $scope.fileupload);
-          xhr.setRequestHeader('X-XSRF-Token', $cookies.get('XSRF-TOKEN'));
-          xhr.send(fd);
+          $scope.xhr.open('POST', $scope.fileupload);
+          $scope.xhr.setRequestHeader('X-XSRF-Token', $cookies.get('XSRF-TOKEN'));
+          $scope.xhr.send(fd);
+
           element[0].value = '';
         })
       }
