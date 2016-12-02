@@ -41,6 +41,12 @@
             params = omit(params, k);
           }
         })
+
+        if (result.search(/\*\w+/)!=-1) {
+          result = result.replace(/\*(\w+)/, function (a, b) {
+            return params[b];
+          })
+        }
         
         if (Object.keys(params).length)
           result += '?'+serialize(params)
