@@ -3956,6 +3956,8 @@ function $ViewDirective(   $state,   $injector,   $uiViewScroll,   $interpolate)
           newScope = scope.$new();
           latestLocals = $state.$current.locals[name];
 
+          newScope.$emit('$viewContentLoading', name);
+
           var clone = $transclude(newScope, function(clone) {
             renderer.enter(clone, $element, function onUiViewEnter() {
               if(currentScope) {
@@ -3981,7 +3983,7 @@ function $ViewDirective(   $state,   $injector,   $uiViewScroll,   $interpolate)
            *
            * @param {Object} event Event object.
            */
-          currentScope.$emit('$viewContentLoaded');
+          currentScope.$emit('$viewContentLoaded', name);
           currentScope.$eval(onloadExp);
         }
       };
