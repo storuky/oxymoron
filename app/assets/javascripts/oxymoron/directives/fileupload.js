@@ -1,5 +1,5 @@
 angular.module("oxymoron.directives.fileupload", [])
-  .directive('fileupload', ['$http', '$timeout', '$cookies', function ($http, $timeout, $cookies) {
+  .directive('fileupload', ['$http', '$timeout', '$cookies', 'ngNotify', function ($http, $timeout, $cookies, ngNotify) {
     return {
       scope: {
         fileupload: "=",
@@ -33,8 +33,9 @@ angular.module("oxymoron.directives.fileupload", [])
           };
 
           $scope.xhr.onload = function() {
-              var res = JSON.parse(this.responseText)
-
+            var res = JSON.parse(this.responseText)
+            
+            if (this.status == 200) {
               $scope.$apply(function() {
                 if (!$scope.hash) {
                   if (attrs.multiple) {
@@ -57,6 +58,9 @@ angular.module("oxymoron.directives.fileupload", [])
 
                 $scope.percentCompleted = undefined;
               });
+            } else {
+              ngNotify.set(res.msg || "Uploading error", "error")
+            }
           };
 
 
