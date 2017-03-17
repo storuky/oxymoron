@@ -35,7 +35,7 @@ module Oxymoron
           write_assets
         end
 
-        ActionDispatch::Reloader.to_prepare do
+        ActiveSupport::Reloader.to_prepare do
           oxymoron_reloader.execute_if_updated
         end
       end
