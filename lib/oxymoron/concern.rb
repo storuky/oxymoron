@@ -3,7 +3,7 @@ module Oxymoron
     extend ActiveSupport::Concern
 
     included do
-      before_filter :set_xsrf_token_cookie
+      after_filter :set_xsrf_token_cookie
     end
 
     def set_xsrf_token_cookie
