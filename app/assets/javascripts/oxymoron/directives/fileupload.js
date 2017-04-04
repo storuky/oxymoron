@@ -22,10 +22,10 @@ angular.module("oxymoron.directives.fileupload", [])
 
           $scope.xhr = new XMLHttpRequest;
 
+          $scope.percentCompleted = 0;
+          
           $scope.xhr.upload.onprogress = function(e) {
-              // Event listener for when the file is uploading
               $scope.$apply(function() {
-                  var percentCompleted;
                   if (e.lengthComputable) {
                       $scope.percentCompleted = Math.round(e.loaded / e.total * 100);
                   }
