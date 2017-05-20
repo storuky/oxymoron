@@ -35,7 +35,7 @@ module Oxymoron
           write_assets
         end
 
-        ActiveSupport::Reloader.to_prepare do
+        (Rails.version.to_i >= 5 ? ActiveSupport : ActionDispatch)::Reloader.to_prepare do
           oxymoron_reloader.execute_if_updated
         end
       end
