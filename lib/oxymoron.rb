@@ -17,7 +17,7 @@ module Oxymoron
       
       @app_routes.each do |route|
         set_routes route
-        set_states route
+        set_states(route) unless route.defaults[:skip_state]
         set_resources route
       end
     end
@@ -85,17 +85,15 @@ module Oxymoron
 
         if route_by_controller = @app_routes_by_controller[route.defaults[:controller]]
           @app_routes_by_controller[route.defaults[:controller]].each do |route|
-            unless route.defaults[:skip_state]
-              base_path = path.gsub(/:(\w)+/, '').gsub(/\(.*$/, '').gsub('//', '/')
-              current_route_path = route.path.spec.to_s.gsub(/:(\w)+/, '').gsub(/\(.*$/, '').gsub('//', '/')
+            base_path = path.gsub(/:(\w)+/, '').gsub(/\(.*$/, '').gsub('//', '/')
+            current_route_path = route.path.spec.to_s.gsub(/:(\w)+/, '').gsub(/\(.*$/, '').gsub('//', '/')
 
-              if (current_route_path.start_with?(base_path))
-                for_hash[route.defaults[:action]] ||= {
-                  url: route.path.spec.to_s.gsub('(.:format)', '.json'),
-                  isArray: route.defaults[:is_array],
-                  method: /GET|POST|PUT|PATCH|DELETE/.match(route.verb.to_s).to_s
-                }
-              end
+            if (current_route_path.start_with?(base_path))
+              for_hash[route.defaults[:action]] ||= {
+                url: route.path.spec.to_s.gsub('(.:format)', '.json'),
+                isArray: route.defaults[:is_array],
+                method: /GET|POST|PUT|PATCH|DELETE/.match(route.verb.to_s).to_s
+              }
             end
             
           end
