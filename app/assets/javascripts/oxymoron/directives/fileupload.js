@@ -19,14 +19,14 @@ angular.module("oxymoron.directives.fileupload", [])
           var fd = new FormData();
 
           angular.forEach(element[0].files, function (file) {
-            if ($scope.maxSize && file.fileSize/1024/1024 > $scope.maxSize) {
+            if ($scope.maxSize && file.size/1024/1024 > $scope.maxSize) {
               valid = false;
               return
             }
             fd.append("attachments[]", file);
           })
 
-          if (valid) {
+          if (!valid) {
             ngNotify.set("File size is more then " + $scope.maxSize + " Mb", "error")
             return false;
           }
