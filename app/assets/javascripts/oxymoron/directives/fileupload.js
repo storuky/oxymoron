@@ -5,20 +5,31 @@ angular.module("oxymoron.directives.fileupload", [])
         fileupload: "=",
         ngModel: "=",
         hash: "=",
-        percentCompleted: "="
+        percentCompleted: "=",
+        maxSize: "="
       },
       restrict: 'A',
       link: function($scope, element, attrs) {
         $scope.percentCompleted = undefined;
 
         element.bind('change', function(){
+          var valid = true;
           if ($scope.xhr) $scope.xhr.abort();
 
           var fd = new FormData();
 
           angular.forEach(element[0].files, function (file) {
+            if ($scope.maxSize && file.fileSize/1024/1024 > $scope.maxSize) {
+              valid = false;
+              return
+            }
             fd.append("attachments[]", file);
           })
+
+          if (valid) {
+            ngNotify.set("File size is more then " + $scope.maxSize + " Mb", "error")
+            return false;
+          }
 
           $scope.xhr = new XMLHttpRequest;
 
