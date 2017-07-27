@@ -37,6 +37,7 @@ module Oxymoron
         ui_params = (route.defaults[:ui_params] || []).join("&")
         ui_params = ui_params.present? ? "?#{ui_params}" : ""
         url_matcher = "'#{path}#{ui_params}'"
+        url_matcher_factory = false
 
         route.path.required_names.each do |required_name|
           if requirement = route.requirements[required_name.to_sym]
@@ -44,9 +45,13 @@ module Oxymoron
               requirement = requirement.to_s[7..-2]
             end
             url_matcher = path.gsub(':'+required_name, "{#{required_name}:(?:#{requirement})}")
+            url_matcher_factory = true
           end
         end
-        url_matcher = "$urlMatcherFactoryProvider.compile(\"#{url_matcher}#{ui_params}\")"
+        
+        if url_matcher_factory
+          url_matcher = "$urlMatcherFactoryProvider.compile(\"#{url_matcher}#{ui_params}\")"
+        end
 
         @states[route.name] = {
           url: url_matcher,
