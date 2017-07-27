@@ -43,10 +43,10 @@ module Oxymoron
             if requirement.is_a? Regexp
               requirement = requirement.to_s[7..-2]
             end
-            url_matcher = path.gsub(':'+required_name, "{#{required_name}:(?:#{requirement})}#{ui_params}")
-            url_matcher = "$urlMatcherFactoryProvider.compile(\"#{url_matcher}\")"
+            url_matcher = path.gsub(':'+required_name, "{#{required_name}:(?:#{requirement})}")
           end
         end
+        url_matcher = "$urlMatcherFactoryProvider.compile(\"#{url_matcher}#{ui_params}\")"
 
         @states[route.name] = {
           url: url_matcher,
