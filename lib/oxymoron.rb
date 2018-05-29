@@ -18,7 +18,7 @@ module Oxymoron
         if sub_routes
           sub_routes.each do |sub_route|
             sub_route.defaults.merge!(route.defaults)
-            sub_route.path.spec.left.left = "#{route.path.spec.to_s}"
+            sub_route.path.spec.left.left = "#{route.path.spec.to_s}/"
             @app_routes << sub_route if sub_route.name.present? && sub_route.verb
           end
         else
