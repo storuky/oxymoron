@@ -13,8 +13,8 @@ module Oxymoron
       @routes, @states, @resources = {}, {}, {}
       
       @app_routes = []
-      Rails.application.routes.routes.each do |route|
-        sub_routes = route&.app&.app&.routes&.routes
+      Rails.application.routes.routes.to_a.each do |route|
+        sub_routes = route.app.app.routes.routes rescue nil
         if sub_routes
           sub_routes.each do |sub_route|
             @app_routes << sub_route if sub_route.name.present? && sub_route.verb
