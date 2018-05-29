@@ -40,7 +40,7 @@ module Oxymoron
     def build_route name, route
       {
         name: name,
-        verb: route.verb.to_s,
+        verb: route.verb,
         path: route.path.spec.to_s.gsub('(.:format)', ''),
         defaults: route.defaults,
         required_names: route.path.required_names,
@@ -58,7 +58,7 @@ module Oxymoron
     end
 
     def set_states route
-      if route.verb.match("GET")
+      if route[:verb].to_s.match("GET")
         path = route[:path]
         ui_params = (route[:defaults][:ui_params] || []).join("&")
         ui_params = ui_params.present? ? "?#{ui_params}" : ""
@@ -123,7 +123,7 @@ module Oxymoron
               for_hash[route[:defaults][:action]] ||= {
                 url: route[:path],
                 isArray: route[:defaults][:is_array],
-                method: /GET|POST|PUT|PATCH|DELETE/.match(route[:verb]).to_s
+                method: /GET|POST|PUT|PATCH|DELETE/.match(route[:verb].to_s).to_s
               }
             end
             
