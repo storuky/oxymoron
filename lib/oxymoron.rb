@@ -19,11 +19,10 @@ module Oxymoron
           sub_routes.each do |sub_route|
             sub_route.defaults.merge!(route.defaults)
             sub_route.path.spec.left.left = "#{route.path.spec.to_s}/"
-            sub_route.name = "#{route.name}_#{sub_route.name}"
-            @app_routes << sub_route if sub_route.name.present? && sub_route.verb
+            @app_routes << build_route("#{route.name}_#{sub_route.name}", sub_route) if sub_route.name.present? && sub_route.verb
           end
         else
-          @app_routes << route if route.name.present? && route.verb
+          @app_routes << build_route(route.name, route) if route.name.present? && route.verb
         end
       end
       
@@ -38,10 +37,21 @@ module Oxymoron
       end
     end
 
+    def build_route name, route
+      {
+        name: name,
+        verb: route.verb.to_s,
+        path: route.path.spec.to_s.gsub('(.:format)', ''),
+        defaults: route.defaults,
+        required_names: route.path.required_names,
+        requirements: route.requirements
+      }
+    end
+
     def set_routes route
-      @routes[route.name] = {
+      @routes[route[:name]] = {
         defaults: (route.defaults[:params] || {}),
-        path: route.path.spec.to_s.gsub('(.:format)', '')
+        path: route[:path]
       }
 
       return @routes
@@ -49,14 +59,14 @@ module Oxymoron
 
     def set_states route
       if route.verb.match("GET")
-        path = route.path.spec.to_s.gsub('(.:format)', '')
-        ui_params = (route.defaults[:ui_params] || []).join("&")
+        path = route[:path]
+        ui_params = (route[:defaults][:ui_params] || []).join("&")
         ui_params = ui_params.present? ? "?#{ui_params}" : ""
         url_matcher = "'#{path}#{ui_params}'"
         url_matcher_factory = false
 
-        route.path.required_names.each do |required_name|
-          if requirement = route.requirements[required_name.to_sym]
+        route[:required_names].each do |required_name|
+          if requirement = route[:requirements][required_name.to_sym]
             if requirement.is_a? Regexp
               requirement = requirement.to_s[7..-2]
             end
@@ -69,19 +79,19 @@ module Oxymoron
           url_matcher = "$urlMatcherFactoryProvider.compile(\"#{url_matcher}#{ui_params}\")"
         end
 
-        @states[route.name] = {
+        @states[route[:name]] = {
           url: url_matcher,
           templateUrl: path,
-          cache: route.defaults[:cache] === false ? false : true
+          cache: route[:defaults][:cache] === false ? false : true
         }
 
-        if route.defaults[:ui_params]
-          @states[route.name][:params] = Hash[route.defaults[:ui_params].map {|v| [v,nil]}]
+        if route[:defaults][:ui_params]
+          @states[route[:name]][:params] = Hash[route[:defaults][:ui_params].map {|v| [v,nil]}]
         end
         
-        if route.defaults[:controller]
-          @states[route.name][:controller] = "#{route.defaults[:controller].camelize.gsub('::', '')}Ctrl as ctrl"
-          @states[route.name][:action] = route.defaults[:action]
+        if route[:defaults][:controller]
+          @states[route[:name]][:controller] = "#{route[:defaults][:controller].camelize.gsub('::', '')}Ctrl as ctrl"
+          @states[route[:name]][:action] = route[:defaults][:action]
         end
       end
 
@@ -89,11 +99,11 @@ module Oxymoron
     end
 
     def set_resources route
-      if route.defaults[:action] == 'show'
-        path = route.path.spec.to_s.gsub('(.:format)', '')
-        @resources[route.name.camelize] = {
+      if route[:defaults][:action] == 'show'
+        path = route[:path]
+        @resources[route[:name].camelize] = {
           url: path,
-          default_params: Hash[route.path.required_names.map{|name| [name, '@'+name]}]
+          default_params: Hash[route[:required_names].map{|name| [name, '@'+name]}]
         }
 
         for_hash = {
@@ -104,23 +114,23 @@ module Oxymoron
           'destroy' => {method: 'DELETE'}
         }
 
-        if route_by_controller = @app_routes_by_controller[route.defaults[:controller]]
-          @app_routes_by_controller[route.defaults[:controller]].each do |route|
+        if route_by_controller = @app_routes_by_controller[route[:defaults][:controller]]
+          @app_routes_by_controller[route[:defaults][:controller]].each do |route|
             base_path = path.gsub(/:(\w)+/, '').gsub(/\(.*$/, '').gsub('//', '/')
-            current_route_path = route.path.spec.to_s.gsub(/:(\w)+/, '').gsub(/\(.*$/, '').gsub('//', '/')
+            current_route_path = route[:path].gsub(/:(\w)+/, '').gsub(/\(.*$/, '').gsub('//', '/')
 
             if (current_route_path.start_with?(base_path))
-              for_hash[route.defaults[:action]] ||= {
-                url: route.path.spec.to_s.gsub('(.:format)', '.json'),
-                isArray: route.defaults[:is_array],
-                method: /GET|POST|PUT|PATCH|DELETE/.match(route.verb.to_s).to_s
+              for_hash[route[:defaults][:action]] ||= {
+                url: route[:path],
+                isArray: route[:defaults][:is_array],
+                method: /GET|POST|PUT|PATCH|DELETE/.match(route[:verb]).to_s
               }
             end
             
           end
         end
         
-        @resources[route.name.camelize][:actions] = for_hash
+        @resources[route[:name].camelize][:actions] = for_hash
       end
 
       return @resources
