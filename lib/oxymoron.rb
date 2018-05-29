@@ -17,6 +17,7 @@ module Oxymoron
         sub_routes = route.app.app.routes.routes rescue nil
         if sub_routes
           sub_routes.each do |sub_route|
+            sub_route.defaults.extend(route.defaults)
             @app_routes << sub_route if sub_route.name.present? && sub_route.verb
           end
         else
