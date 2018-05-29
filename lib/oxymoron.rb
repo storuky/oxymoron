@@ -50,7 +50,7 @@ module Oxymoron
 
     def set_routes route
       @routes[route[:name]] = {
-        defaults: (route.defaults[:params] || {}),
+        defaults: (route[:defaults][:params] || {}),
         path: route[:path]
       }
 
