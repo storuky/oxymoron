@@ -12,7 +12,18 @@ module Oxymoron
       Rails.application.reload_routes!
       @routes, @states, @resources = {}, {}, {}
       
-      @app_routes = Rails.application.routes.routes.select{|route| route.name.present? && route.verb}
+      @app_routes = []
+      Rails.application.routes.routes.each do |route|
+        sub_routes = route&.app&.app&.routes&.routes
+        if sub_routes
+          sub_routes.each do |sub_route|
+            @app_routes << sub_route if sub_route.name.present? && sub_route.verb
+          end
+        else
+          @app_routes << route if route.name.present? && route.verb
+        end
+      end
+      
       @app_routes_by_controller = @app_routes.select{|route| ['new', 'edit', 'show', 'index'].exclude?(route.defaults[:action])}.group_by{|route| route.defaults[:controller]}.delete_if {|k,v| k.nil?}
       
       @app_routes.each do |route|
