@@ -29,7 +29,7 @@ module Oxymoron
       @app_routes_by_controller = @app_routes.select{|route| ['new', 'edit', 'show', 'index'].exclude?(route[:defaults][:action])}.group_by{|route| route[:defaults][:controller]}.delete_if {|k,v| k.nil?}
       
       @app_routes.each do |route|
-        unless route.defaults[:skip_state]
+        unless route[:defaults][:skip_state]
           set_routes(route)
           set_states(route)
           set_resources(route)
