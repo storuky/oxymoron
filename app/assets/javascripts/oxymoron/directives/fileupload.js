@@ -6,7 +6,8 @@ angular.module("oxymoron.directives.fileupload", [])
         ngModel: "=",
         hash: "=",
         percentCompleted: "=",
-        maxSize: "="
+        maxSize: "=",
+        xhr: "="
       },
       restrict: 'A',
       link: function($scope, element, attrs) {
